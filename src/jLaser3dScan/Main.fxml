@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.image.*?>
@@ -8,11 +10,66 @@
 
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="jLaser3dScan.MainController">
-   <center>
-      <ImageView fx:id="currentFrame" fitHeight="480.0" fitWidth="640.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+   <top>
+      <Label text="Example Label" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+   </top>
+   <left>
+      <ImageView fx:id="currentFrame" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_CENTER">
          <viewport>
-            <Rectangle2D height="480.0" width="640.0" />
+            <Rectangle2D />
          </viewport>
       </ImageView>
-   </center>
+   </left>
+   <right>
+      <VBox prefHeight="462.0" prefWidth="217.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="30.0" prefWidth="217.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="36.0" text="CamID">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField />
+               </children>
+            </HBox>
+            <HBox prefHeight="30.0" prefWidth="217.0">
+               <children>
+                  <CheckBox mnemonicParsing="false" prefHeight="27.0" prefWidth="39.0" text="File">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </CheckBox>
+                  <Button mnemonicParsing="false" text="Выбрать">
+                     <HBox.margin>
+                        <Insets top="2.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <Label prefHeight="17.0" prefWidth="217.0" text="File Name" />
+            <HBox prefHeight="44.0" prefWidth="217.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Apply">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" text="Reset">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </right>
 </BorderPane>

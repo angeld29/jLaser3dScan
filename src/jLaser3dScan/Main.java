@@ -17,7 +17,7 @@ public class Main extends Application {
 			BorderPane root = loader.load();
 			controller = loader.getController();
 			//BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("Main.fxml"));
-			Scene scene = new Scene(root,400,400);
+			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle( "jLaser3dScan" );

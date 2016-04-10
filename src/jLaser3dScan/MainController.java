@@ -28,40 +28,40 @@ public class MainController {
     @FXML
     private ImageView currentFrame;
     private Thread captureThread;
-    private VideoCapture camera;
 	
     public void initialize() {
 		System.out.println("init MainController");
 		
-		int camId = 0;
-    	camera = new VideoCapture(camId);
         captureThread = new CaptureThread();
         captureThread.start();
     }
     public void stop() {
-    	if( camera != null  && camera.isOpened()) {
-            camera.release();
-    	}
     	if( captureThread != null ){
     		captureThread.interrupt();
     	}
     }
     private class CaptureThread extends Thread {
     	Image tmp;
+    	private VideoCapture camera;
     	public CaptureThread() {
     	}
         @Override
         public void run() {
-            while (!interrupted()) {
-                tmp = grabFrame();
-                if( tmp != null ){
-                	Platform.runLater(() -> {
-                			currentFrame.setImage(tmp);
-                	});
-                }
-            }
-           //frameBuffer.stop();
-            //serialWriter.disconnect();
+        	int camId = 0;
+        	camera = new VideoCapture(camId);
+        	while (!interrupted()) {
+        		tmp = grabFrame();
+        		if( tmp != null ){
+        			//Platform.runLater(() -> {
+        				currentFrame.setImage(tmp);
+        			//});
+        		}
+        	}
+        	//frameBuffer.stop();
+        	//serialWriter.disconnect();
+        	if( camera != null  && camera.isOpened()) {
+        		camera.release();
+        	}
         }
         private Image mat2Image(Mat frame) {
             MatOfByte buffer = new MatOfByte();
