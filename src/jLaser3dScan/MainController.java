@@ -81,6 +81,8 @@ public class MainController {
         @Override
         public void run() {
         	int camId = 0;
+        	int numSteps = 4;
+        	SerialWriter writer = new SerialWriter(""); 
         	camera = new VideoCapture(camId);
         	while (!interrupted()) {
         		tmp = grabFrame();
@@ -88,8 +90,9 @@ public class MainController {
         			//Platform.runLater(() -> {
         		outputFrame.setImage(tmp);
         			//});
-        		if( isScaning) {
-        			step+=4;
+        		if( isScaning && writer.isRotateReady()){
+        			writer.rotate(numSteps);
+        			step += numSteps;
         			System.out.println(step);
         			if( step >= MAX_STEPS){
         				isScaning= false;
@@ -98,7 +101,7 @@ public class MainController {
         		}
         	}
         	//frameBuffer.stop();
-        	//serialWriter.disconnect();
+        	writer.disconnect();
         	if( camera != null  && camera.isOpened()) {
         		camera.release();
         	}
