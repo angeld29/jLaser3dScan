@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="jLaser3dScan.MainController">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jLaser3dScan.MainController">
    <top>
       <Label text="Example Label" BorderPane.alignment="CENTER">
          <font>
@@ -25,7 +24,7 @@
       </ImageView>
    </left>
    <right>
-      <VBox prefHeight="462.0" prefWidth="217.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="462.0" prefWidth="217.0" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="30.0" prefWidth="217.0">
                <children>
@@ -69,6 +68,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </HBox>
+            <Button fx:id="startScanBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startScan" prefHeight="25.0" prefWidth="103.0" text="Scan" />
          </children>
       </VBox>
    </right>

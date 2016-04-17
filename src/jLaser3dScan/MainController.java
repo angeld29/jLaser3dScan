@@ -25,14 +25,16 @@ import org.opencv.core.MatOfByte;
 
 public class MainController {
 
-    @FXML
-    private ImageView currentFrame;
-    private Thread captureThread;
+    @FXML private ImageView currentFrame;
+    @FXML private Button startScanBtn;
+
+    private CaptureThread captureThread;
+    private boolean isScaning = false;
 	
     public void initialize() {
 		System.out.println("init MainController");
 		
-        captureThread = new CaptureThread();
+        captureThread = new CaptureThread(currentFrame, this);
         captureThread.start();
     }
     public void stop() {
@@ -40,21 +42,59 @@ public class MainController {
     		captureThread.interrupt();
     	}
     }
+    @FXML
+    protected void startScan() {
+		System.out.println("startScan");
+    	if( captureThread == null ){
+    		isScaning = false;
+    		return;
+    	}
+    	if( isScaning ){
+    		captureThread.stopScan();
+            startScanBtn.setText("Start scan");
+    		isScaning = false;
+    	}else{
+    		captureThread.startScan();
+            startScanBtn.setText("Stop scan");
+    		isScaning = true;
+    	}
+    }
     private class CaptureThread extends Thread {
     	Image tmp;
+    	private static final int MAX_STEPS = 456;
+    	private int step = 0;
     	private VideoCapture camera;
-    	public CaptureThread() {
+    	private ImageView outputFrame;
+    	private boolean isScaning = false;
+        private MainController controller;
+    	public CaptureThread( ImageView outputFrame, MainController controller ) {
+            this.controller = controller;
+    		this.outputFrame = outputFrame;
     	}
+        public void startScan() {
+        	step = 0;
+    		isScaning = true;
+        }
+        public void stopScan() {
+    		isScaning = false;
+        }
         @Override
         public void run() {
         	int camId = 0;
         	camera = new VideoCapture(camId);
         	while (!interrupted()) {
         		tmp = grabFrame();
-        		if( tmp != null ){
+        		if( tmp == null ) continue;
         			//Platform.runLater(() -> {
-        				currentFrame.setImage(tmp);
+        		outputFrame.setImage(tmp);
         			//});
+        		if( isScaning) {
+        			step+=4;
+        			System.out.println(step);
+        			if( step >= MAX_STEPS){
+        				isScaning= false;
+        				Platform.runLater(() -> controller.startScan());	
+        			}
         		}
         	}
         	//frameBuffer.stop();
