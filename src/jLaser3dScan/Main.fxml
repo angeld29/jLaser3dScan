@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jLaser3dScan.MainController">
+<BorderPane fx:id="mainWin" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jLaser3dScan.MainController">
    <top>
       <Label text="Example Label" BorderPane.alignment="CENTER">
          <font>
@@ -33,32 +33,45 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField />
+                  <TextField fx:id="iCamID" prefHeight="25.0" prefWidth="40.0" text="0" />
+                  <Label prefHeight="25.0" prefWidth="46.0" text="hAngle">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets left="4.0" right="4.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="fHAngle" prefHeight="25.0" prefWidth="40.0" text="56" />
                </children>
             </HBox>
             <HBox prefHeight="30.0" prefWidth="217.0">
                <children>
-                  <CheckBox mnemonicParsing="false" prefHeight="27.0" prefWidth="39.0" text="File">
+                  <CheckBox fx:id="bIsFile" mnemonicParsing="false" prefHeight="27.0" prefWidth="39.0" text="File">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
                   </CheckBox>
-                  <Button mnemonicParsing="false" text="Выбрать">
+                  <Button mnemonicParsing="false" onAction="#SelectVideoFile" text="Выбрать">
                      <HBox.margin>
                         <Insets top="2.0" />
                      </HBox.margin>
                   </Button>
                </children>
             </HBox>
-            <Label prefHeight="17.0" prefWidth="217.0" text="File Name" />
+            <Label fx:id="sFilename" prefHeight="17.0" prefWidth="217.0" text="File Name" />
+            <ChoiceBox fx:id="sPort" prefWidth="150.0" />
             <HBox prefHeight="44.0" prefWidth="217.0">
                <children>
-                  <Button mnemonicParsing="false" text="Apply">
+                  <Button mnemonicParsing="false" onAction="#SaveSettings" text="Apply">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Reset">
+                  <Button mnemonicParsing="false" onAction="#LoadSettings" text="Reset">
                      <HBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </HBox.margin>
@@ -68,7 +81,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </HBox>
-            <Button fx:id="startScanBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startScan" prefHeight="25.0" prefWidth="103.0" text="Scan" />
+            <Button fx:id="startScanBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startScan" prefHeight="25.0" prefWidth="103.0" text="Start Scan" />
          </children>
       </VBox>
    </right>
