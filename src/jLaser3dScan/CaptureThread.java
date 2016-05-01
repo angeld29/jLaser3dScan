@@ -16,6 +16,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Size;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 import java.io.ByteArrayInputStream;
 import org.opencv.core.Mat;
@@ -29,12 +30,18 @@ public class CaptureThread extends Thread {
 	private ImageView outputFrame;
 	private boolean isScaning = false;
 	private MainController controller;
-	public CaptureThread( ImageView outputFrame, MainController controller ) {
+	private ScanSettings settings;
+	private double framen=0;
+	private double maxframes=0;
+	public CaptureThread( ImageView outputFrame, MainController controller, ScanSettings settings) {
 		this.controller = controller;
+		this.settings = settings;
 		this.outputFrame = outputFrame;
 	}
 	public void startScan() {
 		step = 0;
+		framen =0;
+		camera.set(Videoio.CAP_PROP_POS_FRAMES, framen);
 		isScaning = true;
 	}
 	public void stopScan() {
@@ -44,23 +51,35 @@ public class CaptureThread extends Thread {
 	public void run() {
 		int camId = 0;
 		int numSteps = 4;
-		SerialWriter writer = new SerialWriter(""); 
-		camera = new VideoCapture(camId);
+		SerialWriter writer = new SerialWriter(settings.port);
+		if( settings.isFile ){
+			camera = new VideoCapture(settings.filename);
+			maxframes =  camera.get(Videoio.CAP_PROP_FRAME_COUNT );	
+		}else{
+			camera = new VideoCapture(settings.camID);
+		}
 		while (!interrupted()) {
-			tmp = grabFrame();
+			if( tmp == null || !settings.isFile) {
+				tmp = grabFrame();
+			}
 			if( tmp == null ) continue;
-			//Platform.runLater(() -> {
-			outputFrame.setImage(tmp);
-			//});
 			if( isScaning && writer.isRotateReady()){
-				writer.rotate(numSteps);
+				if( settings.isFile ){
+					tmp = grabFrame();
+					//double pos = camera.get(Videoio.CAP_PROP_POS_FRAMES);	
+					//System.out.println(framen + " " + pos + " " + maxframes);
+					framen += 1;
+				}else{
+					writer.rotate(numSteps);
+				}
 				step += numSteps;
-				System.out.println(step);
-				if( step >= MAX_STEPS){
+			//	System.out.println(step);
+				if( step >= MAX_STEPS  || tmp == null /*(settings.isFile && framen > maxframes)*/ ){
 					isScaning= false;
 					Platform.runLater(() -> controller.startScan());	
 				}
 			}
+			if( tmp != null ) outputFrame.setImage(tmp);
 		}
 		//frameBuffer.stop();
 		writer.disconnect();
@@ -85,6 +104,9 @@ public class CaptureThread extends Thread {
 				return null;
 			}
 			Mat tmpFrame = new Mat();
+			if( settings.isFile ){
+		//		camera.set(Videoio.CAP_PROP_POS_FRAMES, framen);
+			}
 			if (camera.read(tmpFrame) && !tmpFrame.empty()) {
 				imageToShow = mat2Image(tmpFrame);
 			}

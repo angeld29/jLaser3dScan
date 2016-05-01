@@ -51,15 +51,17 @@ public class MainController {
 		startCapture();
     }
     private void startCapture(){
-        captureThread = new CaptureThread(currentFrame, this);
+        captureThread = new CaptureThread(currentFrame, this, settings);
         captureThread.start();
     }
     @FXML protected void SelectVideoFile(){
     	FileChooser fileChooser = new FileChooser();
     	fileChooser.setTitle("Open Video File");
-        fileChooser.setInitialDirectory(
-            new File(System.getProperty("user.dir"))
-        ); 
+    	if( videoFilename.isEmpty()){
+    		fileChooser.setInitialDirectory( new File(System.getProperty("user.dir"))); 
+    	}else{
+    		fileChooser.setInitialDirectory( new File(videoFilename).getParentFile()); 
+    	}
     	File file = fileChooser.showOpenDialog((Stage) mainWin.getScene().getWindow());
 
         if (file != null ) {
