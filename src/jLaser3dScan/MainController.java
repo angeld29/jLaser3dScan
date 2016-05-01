@@ -20,6 +20,7 @@ import org.opencv.videoio.VideoCapture;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.nio.file.*;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -41,18 +42,19 @@ public class MainController {
     private CaptureThread captureThread;
     private boolean isScaning = false;
     private ScanSettings settings; 
-    private string videoFilename;
+    private String videoFilename;
 	
     public void initialize() {
 		System.out.println("init MainController");
 		settings = new ScanSettings();
 		LoadSettings();
+		startCapture();
+    }
+    private void startCapture(){
         captureThread = new CaptureThread(currentFrame, this);
         captureThread.start();
     }
     @FXML protected void SelectVideoFile(){
-    	System.out.println("select video");
-    	
     	FileChooser fileChooser = new FileChooser();
     	fileChooser.setTitle("Open Video File");
         fileChooser.setInitialDirectory(
@@ -87,6 +89,11 @@ public class MainController {
     	settings.port = sPort.getValue();
     	settings.filename = videoFilename;
     	settings.Save();
+    	captureThread.interrupt();
+    	try{
+    		captureThread.join();	
+    	}catch(InterruptedException e){}
+    	startCapture();
     }
     public void stop() {
     	if( captureThread != null ){
@@ -110,80 +117,4 @@ public class MainController {
     		isScaning = true;
     	}
     }
-    private class CaptureThread extends Thread {
-    	Image tmp;
-    	private static final int MAX_STEPS = 456;
-    	private int step = 0;
-    	private VideoCapture camera;
-    	private ImageView outputFrame;
-    	private boolean isScaning = false;
-        private MainController controller;
-    	public CaptureThread( ImageView outputFrame, MainController controller ) {
-            this.controller = controller;
-    		this.outputFrame = outputFrame;
-    	}
-        public void startScan() {
-        	step = 0;
-    		isScaning = true;
-        }
-        public void stopScan() {
-    		isScaning = false;
-        }
-        @Override
-        public void run() {
-        	int camId = 0;
-        	int numSteps = 4;
-        	SerialWriter writer = new SerialWriter(""); 
-        	camera = new VideoCapture(camId);
-        	while (!interrupted()) {
-        		tmp = grabFrame();
-        		if( tmp == null ) continue;
-        			//Platform.runLater(() -> {
-        		outputFrame.setImage(tmp);
-        			//});
-        		if( isScaning && writer.isRotateReady()){
-        			writer.rotate(numSteps);
-        			step += numSteps;
-        			System.out.println(step);
-        			if( step >= MAX_STEPS){
-        				isScaning= false;
-        				Platform.runLater(() -> controller.startScan());	
-        			}
-        		}
-        	}
-        	//frameBuffer.stop();
-        	writer.disconnect();
-        	if( camera != null  && camera.isOpened()) {
-        		camera.release();
-        	}
-        }
-        private Image mat2Image(Mat frame) {
-            MatOfByte buffer = new MatOfByte();
-            Imgcodecs.imencode(".bmp", frame, buffer);
-            return new Image(new ByteArrayInputStream(buffer.toArray()));
-        }
-
-        private Image grabFrame() {
-            //init
-            Image imageToShow = null;
-            Mat frame;
-
-            // check if the capture is open
-            try {
-            	if( camera == null  || !camera.isOpened()) {
-            		return null;
-            	}
-            	Mat tmpFrame = new Mat();
-            	if (camera.read(tmpFrame) && !tmpFrame.empty()) {
-            		imageToShow = mat2Image(tmpFrame);
-            	}
-            } catch (Exception e) {
-                e.printStackTrace();
-                // log the error
-                System.err.println("ERROR: " + e.getMessage());
-            }
-            return imageToShow;
-        }
-    }
-
 }
