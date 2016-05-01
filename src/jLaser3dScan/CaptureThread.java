@@ -49,14 +49,15 @@ public class CaptureThread extends Thread {
 	}
 	@Override
 	public void run() {
-		int camId = 0;
 		int numSteps = 4;
-		SerialWriter writer = new SerialWriter(settings.port);
+		SerialWriter writer;
 		if( settings.isFile ){
 			camera = new VideoCapture(settings.filename);
 			maxframes =  camera.get(Videoio.CAP_PROP_FRAME_COUNT );	
+			writer = new SerialWriter("emul");
 		}else{
 			camera = new VideoCapture(settings.camID);
+			writer = new SerialWriter(settings.port);
 		}
 		while (!interrupted()) {
 			if( tmp == null || !settings.isFile) {
@@ -69,9 +70,8 @@ public class CaptureThread extends Thread {
 					//double pos = camera.get(Videoio.CAP_PROP_POS_FRAMES);	
 					//System.out.println(framen + " " + pos + " " + maxframes);
 					framen += 1;
-				}else{
-					writer.rotate(numSteps);
 				}
+				writer.rotate(numSteps);
 				step += numSteps;
 			//	System.out.println(step);
 				if( step >= MAX_STEPS  || tmp == null /*(settings.isFile && framen > maxframes)*/ ){
@@ -79,7 +79,10 @@ public class CaptureThread extends Thread {
 					Platform.runLater(() -> controller.startScan());	
 				}
 			}
-			if( tmp != null ) outputFrame.setImage(tmp);
+			if( tmp != null ) {
+				controller.setImage(0, tmp);
+			//	outputFrame.setImage(tmp);
+			}
 		}
 		//frameBuffer.stop();
 		writer.disconnect();
@@ -104,9 +107,6 @@ public class CaptureThread extends Thread {
 				return null;
 			}
 			Mat tmpFrame = new Mat();
-			if( settings.isFile ){
-		//		camera.set(Videoio.CAP_PROP_POS_FRAMES, framen);
-			}
 			if (camera.read(tmpFrame) && !tmpFrame.empty()) {
 				imageToShow = mat2Image(tmpFrame);
 			}

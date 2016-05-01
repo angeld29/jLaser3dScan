@@ -32,6 +32,9 @@ public class MainController {
 
 	@FXML private BorderPane mainWin;
 	@FXML private ImageView currentFrame;
+	@FXML private ImageView img1;
+	@FXML private ImageView img2;
+	@FXML private ImageView img3;
     @FXML private Button startScanBtn;
     @FXML private TextField fHAngle;
     @FXML private TextField iCamID;
@@ -102,9 +105,14 @@ public class MainController {
     		captureThread.interrupt();
     	}
     }
+    public void setImage(int id, Image img){
+    	if( id == 0 ) {currentFrame.setImage(img); }
+    	if( id == 1 ) {img1.setImage(img); }
+    	if( id == 2 ) {img2.setImage(img); }
+    	if( id == 3 ) {img3.setImage(img); }
+    }
     @FXML
     protected void startScan() {
-		System.out.println("startScan");
     	if( captureThread == null ){
     		isScaning = false;
     		return;
