@@ -19,24 +19,26 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
 import java.io.ByteArrayInputStream;
+import org.opencv.core.Core;
+import org.opencv.core.Scalar; 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 
 public class CaptureThread extends Thread {
-	Image tmp;
+	private Mat mat = new Mat();
 	private static final int MAX_STEPS = 456;
 	private int step = 0;
 	private VideoCapture camera;
-	private ImageView outputFrame;
 	private boolean isScaning = false;
 	private MainController controller;
 	private ScanSettings settings;
+	private ProcessImage procimg;
 	private double framen=0;
 	private double maxframes=0;
-	public CaptureThread( ImageView outputFrame, MainController controller, ScanSettings settings) {
+	public CaptureThread( MainController controller, ScanSettings settings) {
 		this.controller = controller;
 		this.settings = settings;
-		this.outputFrame = outputFrame;
+		procimg = new ProcessImage(controller, settings);
 	}
 	public void startScan() {
 		step = 0;
@@ -59,14 +61,18 @@ public class CaptureThread extends Thread {
 			camera = new VideoCapture(settings.camID);
 			writer = new SerialWriter(settings.port);
 		}
-		while (!interrupted()) {
-			if( tmp == null || !settings.isFile) {
-				tmp = grabFrame();
+		while (!interrupted()) 
+		{
+			if( mat.empty()  || !settings.isFile) {
+				if(!grabFrameMat()) continue;
 			}
-			if( tmp == null ) continue;
 			if( isScaning && writer.isRotateReady()){
 				if( settings.isFile ){
-					tmp = grabFrame();
+					if(!grabFrameMat()){
+						isScaning= false;
+						Platform.runLater(() -> controller.startScan());	
+						continue;
+					}
 					//double pos = camera.get(Videoio.CAP_PROP_POS_FRAMES);	
 					//System.out.println(framen + " " + pos + " " + maxframes);
 					framen += 1;
@@ -74,15 +80,12 @@ public class CaptureThread extends Thread {
 				writer.rotate(numSteps);
 				step += numSteps;
 			//	System.out.println(step);
-				if( step >= MAX_STEPS  || tmp == null /*(settings.isFile && framen > maxframes)*/ ){
+				if( step >= MAX_STEPS ){
 					isScaning= false;
 					Platform.runLater(() -> controller.startScan());	
 				}
 			}
-			if( tmp != null ) {
-				controller.setImage(0, tmp);
-			//	outputFrame.setImage(tmp);
-			}
+			procimg.run(mat);
 		}
 		//frameBuffer.stop();
 		writer.disconnect();
@@ -90,13 +93,26 @@ public class CaptureThread extends Thread {
 			camera.release();
 		}
 	}
-	private Image mat2Image(Mat frame) {
-		MatOfByte buffer = new MatOfByte();
-		Imgcodecs.imencode(".bmp", frame, buffer);
-		return new Image(new ByteArrayInputStream(buffer.toArray()));
-	}
 
-	private Image grabFrame() {
+	private boolean grabFrameMat() {
+
+		// check if the capture is open
+		try {
+			if( camera == null  || !camera.isOpened()) {
+				return false;
+			}
+			if( camera.read(mat) && !mat.empty()){
+				//tmp = mat2Image(mat);
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// log the error
+			System.err.println("ERROR: " + e.getMessage());
+		}
+		return false;
+	}
+	/*private Image grabFrame() {
 		//init
 		Image imageToShow = null;
 		Mat frame;
@@ -116,5 +132,5 @@ public class CaptureThread extends Thread {
 			System.err.println("ERROR: " + e.getMessage());
 		}
 		return imageToShow;
-	}
+	}*/
 }

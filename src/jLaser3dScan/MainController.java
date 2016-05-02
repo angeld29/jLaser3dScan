@@ -10,6 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Slider;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import org.opencv.videoio.Videoio;
 import org.opencv.videoio.VideoWriter;
@@ -35,6 +38,15 @@ public class MainController {
 	@FXML private ImageView img1;
 	@FXML private ImageView img2;
 	@FXML private ImageView img3;
+	@FXML private ImageView img4;
+	@FXML private ImageView img5;
+	@FXML private ImageView img6;
+	@FXML private Slider hmin;
+	@FXML private Slider hmax;
+	@FXML private Slider umin;
+	@FXML private Slider umax;
+	@FXML private Slider vmin;
+	@FXML private Slider vmax;
     @FXML private Button startScanBtn;
     @FXML private TextField fHAngle;
     @FXML private TextField iCamID;
@@ -51,10 +63,34 @@ public class MainController {
 		System.out.println("init MainController");
 		settings = new ScanSettings();
 		LoadSettings();
+		hmin.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    settings.hmin=new_val.intValue();
+            } });
+		hmax.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    settings.hmax=new_val.intValue();
+            } });
+		umin.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    settings.umin=new_val.intValue();
+            } });
+		umax.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    settings.umax=new_val.intValue();
+            } });
+		vmin.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    settings.vmin=new_val.intValue();
+            } });
+		vmax.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    settings.vmax=new_val.intValue();
+            } });
 		startCapture();
     }
     private void startCapture(){
-        captureThread = new CaptureThread(currentFrame, this, settings);
+        captureThread = new CaptureThread( this, settings);
         captureThread.start();
     }
     @FXML protected void SelectVideoFile(){
@@ -86,6 +122,12 @@ public class MainController {
     	sPort.getItems().add("emul");
     	sPort.getSelectionModel().select(settings.port);
     	setFilename(settings.filename);
+    	hmin.setValue(settings.hmin);
+    	hmax.setValue(settings.hmax);
+    	umin.setValue(settings.umin);
+    	umax.setValue(settings.umax);
+    	vmin.setValue(settings.vmin);
+    	vmax.setValue(settings.vmax);
     }
     @FXML protected void SaveSettings(){
     	settings.isFile = bIsFile.isSelected();
@@ -110,6 +152,9 @@ public class MainController {
     	if( id == 1 ) {img1.setImage(img); }
     	if( id == 2 ) {img2.setImage(img); }
     	if( id == 3 ) {img3.setImage(img); }
+    	if( id == 4 ) {img4.setImage(img); }
+    	if( id == 5 ) {img5.setImage(img); }
+    	if( id == 6 ) {img6.setImage(img); }
     }
     @FXML
     protected void startScan() {
