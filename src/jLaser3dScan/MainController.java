@@ -21,6 +21,9 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Size;
 import org.opencv.videoio.VideoCapture;
 
+import jssc.SerialPortException;
+import jssc.SerialPortList;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.file.*;
@@ -62,7 +65,7 @@ public class MainController {
     private String videoFilename;
 	
     public void initialize() {
-		System.out.println("init MainController");
+		//System.out.println("init MainController");
 		settings = new ScanSettings();
 		LoadSettings();
 		hmin.valueProperty().addListener(new ChangeListener<Number>() {
@@ -122,6 +125,8 @@ public class MainController {
     	iCamID.setText(String.valueOf(settings.camID));
     	sPort.getItems().clear();
     	sPort.getItems().add("emul");
+        sPort.getItems().addAll(SerialPortList.getPortNames());
+
     	sPort.getSelectionModel().select(settings.port);
     	setFilename(settings.filename);
     	hmin.setValue(settings.hmin);

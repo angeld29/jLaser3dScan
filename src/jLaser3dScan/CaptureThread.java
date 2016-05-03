@@ -60,7 +60,7 @@ public class CaptureThread extends Thread {
 
         Date date = new Date(); 
         String filename = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss.SSS").format(date) ;
-        System.out.println(filename+ " " );
+        //System.out.println(filename+ " " );
         File theDir = new File("video");
         if (!theDir.exists()) {
             try{
@@ -92,7 +92,6 @@ public class CaptureThread extends Thread {
 		isScaning = false;
         if( outputVideo.isOpened() ){
         	outputVideo.release();
-        	System.out.println("outputVideo.release");
         }
 	}
 	@Override
