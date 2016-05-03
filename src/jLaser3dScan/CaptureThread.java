@@ -24,6 +24,11 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.io.File;
+
+
 public class CaptureThread extends Thread {
 	private Mat mat = new Mat();
 	private static final int MAX_STEPS = 456;
@@ -35,9 +40,16 @@ public class CaptureThread extends Thread {
 	private ProcessImage procimg;
 	private double framen=0;
 	private double maxframes=0;
+	//запись видео
+    private VideoWriter outputVideo;
+    private Integer frameW = 640;
+    private Integer frameH = 480;
+    Mat resframe = new Mat();
+
 	public CaptureThread( MainController controller, ScanSettings settings) {
 		this.controller = controller;
 		this.settings = settings;
+        outputVideo = new VideoWriter();
 		procimg = new ProcessImage(controller, settings);
 	}
 	public void startScan() {
@@ -45,9 +57,43 @@ public class CaptureThread extends Thread {
 		framen =0;
 		camera.set(Videoio.CAP_PROP_POS_FRAMES, framen);
 		isScaning = true;
+
+        Date date = new Date(); 
+        String filename = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss.SSS").format(date) ;
+        System.out.println(filename+ " " );
+        File theDir = new File("video");
+        if (!theDir.exists()) {
+            try{
+                theDir.mkdirs();
+            } 
+            catch(SecurityException se){
+                //handle it
+            }        
+        }
+        try{
+//        	outputVideo.open(filename, outputVideo.fourcc('M','P','4','V'), 20, new Size(frameW, frameH));
+        	//outputVideo.open("video/"+filename+".avi", outputVideo.fourcc('H','2','6','4'), 25, new Size(frameW, frameH));
+      	//outputVideo.open(filename, outputVideo.fourcc('A','V','C','1'), 20, new Size(frameW, frameH));
+      	outputVideo.open("video/"+filename+".avi", outputVideo.fourcc('X','V','I','D'), 25, new Size(frameW, frameH), true);
+      	//outputVideo.open("video/"+filename+".avi", outputVideo.fourcc('M','S','V','C'), 25, new Size(frameW, frameH), true);
+        //outputVideo.open(filename+".avi", -1, 30, new Size(frameW, frameH));
+        } catch (Exception e) {
+            e.printStackTrace();
+            // log the error
+            System.err.println("ERROR: " + e.getMessage());
+        }
+        if(!outputVideo.isOpened()){
+            System.err.println("ERROR openvideo: " + filename);
+        }
+        
+
 	}
 	public void stopScan() {
 		isScaning = false;
+        if( outputVideo.isOpened() ){
+        	outputVideo.release();
+        	System.out.println("outputVideo.release");
+        }
 	}
 	@Override
 	public void run() {
@@ -61,14 +107,17 @@ public class CaptureThread extends Thread {
 			camera = new VideoCapture(settings.camID);
 			writer = new SerialWriter(settings.port);
 		}
+	    frameW = (int) camera.get(Videoio.CAP_PROP_FRAME_WIDTH);
+	    frameH = (int) camera.get(Videoio.CAP_PROP_FRAME_HEIGHT);
+
 		while (!interrupted()) 
 		{
-			if( mat.empty()  || !settings.isFile) {
+			if( mat.empty()  || !settings.isFile) {//Для видео читаем только первый кадр для отображения
 				if(!grabFrameMat()) continue;
 			}
 			if( isScaning && writer.isRotateReady()){
 				if( settings.isFile ){
-					if(!grabFrameMat()){
+					if(!grabFrameMat()){//при сканировании читаем кадры из видео 
 						isScaning= false;
 						Platform.runLater(() -> controller.startScan());	
 						continue;
@@ -77,6 +126,11 @@ public class CaptureThread extends Thread {
 					//System.out.println(framen + " " + pos + " " + maxframes);
 					framen += 1;
 				}
+            	if(outputVideo.isOpened()){
+            		Imgproc.resize(mat, resframe, new Size(frameW, frameH));
+            		outputVideo.write(resframe);
+            	}
+				
 				writer.rotate(numSteps);
 				step += numSteps;
 			//	System.out.println(step);

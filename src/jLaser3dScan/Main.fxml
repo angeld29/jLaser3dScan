@@ -16,13 +16,6 @@
          </font>
       </Label>
    </top>
-   <left>
-      <ImageView fx:id="currentFrame" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_CENTER">
-         <viewport>
-            <Rectangle2D />
-         </viewport>
-      </ImageView>
-   </left>
    <right>
       <VBox alignment="TOP_CENTER" prefHeight="462.0" prefWidth="217.0" BorderPane.alignment="CENTER">
          <children>
@@ -163,4 +156,21 @@
          </children>
       </VBox>
    </center>
+   <left>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fx:id="currentFrame" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="img7" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="img8" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </left>
 </BorderPane>
