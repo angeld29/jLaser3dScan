@@ -40,7 +40,7 @@ public class CaptureThread extends Thread {
 	private ProcessImage procimg;
 	private double framen=0;
 	private double maxframes=0;
-	//запись видео
+	//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     private VideoWriter outputVideo;
     private Integer frameW = 640;
     private Integer frameH = 480;
@@ -111,12 +111,12 @@ public class CaptureThread extends Thread {
 
 		while (!interrupted()) 
 		{
-			if( mat.empty()  || !settings.isFile) {//Для видео читаем только первый кадр для отображения
+			if( mat.empty()  || !settings.isFile) {//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 				if(!grabFrameMat()) continue;
 			}
 			if( isScaning && writer.isRotateReady()){
 				if( settings.isFile ){
-					if(!grabFrameMat()){//при сканировании читаем кадры из видео 
+					if(!grabFrameMat()){//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 
 						isScaning= false;
 						Platform.runLater(() -> controller.startScan());	
 						continue;
@@ -139,7 +139,13 @@ public class CaptureThread extends Thread {
 				}
 			}
 			procimg.run(mat);
-		}
+		/*	try {
+				this.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+*/		}
 		//frameBuffer.stop();
 		writer.disconnect();
 		if( camera != null  && camera.isOpened()) {
