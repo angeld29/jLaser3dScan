@@ -25,7 +25,7 @@ public class ProcessImage {
 	private Mat tmp4 = new Mat();
 	private Mat mat;
 	private Mat hsv = new Mat();
-	private Mat hsvf = new Mat();
+	private Mat hsvm = new Mat();
 	private Mat[] mats = new Mat[NUM_MATS];
 	public ProcessImage ( MainController controller, ScanSettings settings) {
 		this.controller = controller;
@@ -50,8 +50,8 @@ public class ProcessImage {
 		if(settings.hmin < settings.hmax ){
 			Core.inRange(mats[0], new Scalar(settings.hmin), new Scalar(settings.hmax), mats[1]);  
 		}else{
-			Core.inRange(mats[0], new Scalar(0), new Scalar(settings.hmin), tmp1);  
-			Core.inRange(mats[0], new Scalar(settings.hmax), new Scalar(255), tmp2);  
+			Core.inRange(mats[0], new Scalar(0), new Scalar(settings.hmax), tmp1);  
+			Core.inRange(mats[0], new Scalar(settings.hmin), new Scalar(255), tmp2);  
 			Core.add(tmp1, tmp2, mats[1]);
 		}
 		/*List<Mat> ioutplanes = new ArrayList<Mat>(3);
@@ -61,16 +61,20 @@ public class ProcessImage {
 
 		Core.merge(ioutplanes, hsvf);*/
 		Core.bitwise_and(mats[1], mats[3], tmp1);
-		Core.bitwise_and(tmp1, mats[5], hsvf);
+		Core.bitwise_and(tmp1, mats[5], hsvm);
 	}
 	public void run (Mat mat){
 		this.mat = mat;
 		FilterHSV(mat);
 
 		//Imgproc.erode(tmp2, tmp3, tmp4);
-		Imgproc.adaptiveThreshold(hsvf, tmp3, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 7, 5);
-		mats[6] = hsvf.clone();
-		mats[7] = tmp3.clone();
+		//Imgproc.adaptiveThreshold(hsvm, tmp3, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 7, 5);
+		//Imgproc.cvtColor(hsvm, tmp1, Imgproc.COLOR_GRAY2RGB);
+		Core.bitwise_and(mats[4], hsvm, tmp2);
+		Imgproc.threshold(tmp2, tmp3, 250, 255, Imgproc.THRESH_BINARY+Imgproc.THRESH_OTSU);
+		mats[0] = tmp2;
+		mats[6] = hsvm;
+		mats[7] = tmp3;
 		//Imgproc.morphologyEx(mats[2], mats[5], Imgproc.MORPH_TOPHAT, kernel);
 		//Imgproc.erode(mats[7], mats[6], tmp2);
 		//Imgproc.erode(tmp2, mats[0], Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(4,1)));
