@@ -75,26 +75,32 @@ public class MainController {
 		hmin.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                     settings.hmin=new_val.intValue();
+                    settings.drawed = false;
             } });
 		hmax.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                     settings.hmax=new_val.intValue();
+                    settings.drawed = false;
             } });
 		umin.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                     settings.umin=new_val.intValue();
+                    settings.drawed = false;
             } });
 		umax.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                     settings.umax=new_val.intValue();
+                    settings.drawed = false;
             } });
 		vmin.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                     settings.vmin=new_val.intValue();
+                    settings.drawed = false;
             } });
 		vmax.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                     settings.vmax=new_val.intValue();
+                    settings.drawed = false;
             } });
 		startCapture();
     }

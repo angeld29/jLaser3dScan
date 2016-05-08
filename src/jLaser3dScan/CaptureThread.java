@@ -162,6 +162,7 @@ public class CaptureThread extends Thread {
 			}
 			if( camera.read(mat) && !mat.empty()){
 				//tmp = mat2Image(mat);
+				settings.drawed = false;
 				return true;
 			}
 		} catch (Exception e) {

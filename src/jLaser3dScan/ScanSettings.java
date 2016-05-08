@@ -14,6 +14,7 @@ public class ScanSettings {
 	public String filename;
 	public String port; 
 	public double hAngle;
+	public boolean drawed = false;
 	public ScanSettings(){
 		userPrefs = Preferences.userRoot().node("jLaser3dScan");
 		

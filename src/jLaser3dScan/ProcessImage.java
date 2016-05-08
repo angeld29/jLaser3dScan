@@ -4,7 +4,9 @@ import javafx.scene.image.Image;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import org.opencv.core.Core;
 import org.opencv.core.Scalar; 
@@ -102,10 +104,48 @@ public class ProcessImage {
 			}
 		}
 	}
+	private boolean compareLines(int[] line1, int[] line2){
+			 int maxdiff = 20;
+				 if(Math.abs(line1[0]-line2[0]) < maxdiff  && 
+						 Math.abs(line1[1]-line2[1]) < maxdiff  && 
+						 Math.abs(line1[2]-line2[2]) < maxdiff  && 
+						 Math.abs(line1[3]-line2[3]) < maxdiff  ){
+					 return true;
+				 }
+		
+		return false;
+	}
+	private ArrayList<int[]> getLines(Mat in){
+		ArrayList<int[]> vec = new ArrayList <int[]>();
+		Mat lines = new Mat();
+		Imgproc.HoughLinesP(tmp3, lines, 1,3.14/180, 50,100,10);
+		for (int x = 0; x < lines.rows(); x++)
+	    {
+			double[] vecd = lines.get(x,0);
+			int [] veci = { (int)vecd[0], (int)vecd[1],(int)vecd[2],(int)vecd[3]};
+	          
+			boolean hasLine = false;
+			 Iterator itr = vec.iterator();
+			   
+			    //use hasNext() and next() methods of Iterator to iterate through the elements
+			 while(itr.hasNext()){
+				 int[] itm = (int[]) itr.next();
+				 if(compareLines(itm, veci)){
+					 hasLine = true;
+					 break;
+				 }
+			 }
+			 if(!hasLine) vec.add(veci);
+	    }
+
+		return vec;
+	}
 	public void run (Mat mat){
 		this.mat = mat;
 		FilterHSV(mat);
 
+		if(settings.drawed) return;
+		settings.drawed = true;
 		//Imgproc.erode(tmp2, tmp3, tmp4);
 		//Imgproc.adaptiveThreshold(hsvm, tmp3, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 7, 5);
 		//Imgproc.cvtColor(hsvm, tmp1, Imgproc.COLOR_GRAY2RGB);
@@ -116,6 +156,27 @@ public class ProcessImage {
 		tmp3.copyTo(mats[7]);
 		tmp2.copyTo(mats[9]);
 		FindPoints(mats[9]);
+		ArrayList<int[]> vecl = getLines(tmp3);
+		mat.copyTo(mats[10]);
+		for (int x = 0; x < vecl.size(); x++)
+	    {
+			int[] vec = vecl.get(x);
+			System.out.println(vec[0] + " " + vec[1]+ " " + vec[2] + " " + vec[3]);
+	          
+	          int x1 = vec[0], 
+	                 y1 = vec[1],
+	                 x2 = vec[2],
+	                 y2 = vec[3];
+	          /*double x1 = lines.get(0, x)[0], 
+	                 y1 = lines.get(0, x)[1],
+	                 x2 = lines.get(1, x)[0],
+	                 y2 = lines.get(1, x)[1];*/
+	          Point start = new Point(x1, y1);
+	          Point end = new Point(x2, y2);
+	          Imgproc.line(mats[10], start, end, new Scalar(255,0,0), 3);
+	          //break;
+	    }
+
 		//Imgproc.morphologyEx(mats[2], mats[5], Imgproc.MORPH_TOPHAT, kernel);
 		//Imgproc.erode(mats[7], mats[6], tmp2);
 		//Imgproc.erode(tmp2, mats[0], Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(4,1)));
