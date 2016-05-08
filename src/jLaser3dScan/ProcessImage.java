@@ -63,6 +63,45 @@ public class ProcessImage {
 		Core.bitwise_and(mats[1], mats[3], tmp1);
 		Core.bitwise_and(tmp1, mats[5], hsvm);
 	}
+	public void FindPoints(Mat in){
+		for (int j = 0; j < mat.rows(); j++) {
+			int firstOff = -1;
+			int lastOff = -1;
+			int maxVal = -1;
+			int numdark = 0;
+
+			for (int k = 0; k < mat.cols(); k++) {
+				int val =(int) in.get(j, k)[0];
+				in.put(j, k, 0 );
+				if(val <= 1 ){
+					numdark++;
+					if( numdark > 5 || k == mat.cols()-1) {
+						if(maxVal > 0 ) {
+							//System.out.println(j+ " " + maxVal + " " + lastOff + " " + firstOff);
+							int off = (firstOff + lastOff)/2;
+							in.put(j, firstOff,  255);
+							maxVal = -1;
+							firstOff = -1;
+							lastOff = -1;
+							maxVal = -1;
+						}
+					}
+				}else{
+					numdark = 0;
+					if( val > maxVal) {
+						maxVal = val;
+						firstOff = lastOff = k;
+					}
+					if( val == maxVal ){
+						lastOff = k;
+					}
+				}
+			}
+			if( maxVal > 0 ){
+				System.out.println(maxVal + " " + lastOff + " " + firstOff);
+			}
+		}
+	}
 	public void run (Mat mat){
 		this.mat = mat;
 		FilterHSV(mat);
@@ -72,9 +111,11 @@ public class ProcessImage {
 		//Imgproc.cvtColor(hsvm, tmp1, Imgproc.COLOR_GRAY2RGB);
 		Core.bitwise_and(mats[4], hsvm, tmp2);
 		Imgproc.threshold(tmp2, tmp3, 250, 255, Imgproc.THRESH_BINARY+Imgproc.THRESH_OTSU);
-		tmp2.copyTo(mats[0]);
+		tmp2.copyTo(mats[8]);
 		hsvm.copyTo(mats[6]);
 		tmp3.copyTo(mats[7]);
+		tmp2.copyTo(mats[9]);
+		FindPoints(mats[9]);
 		//Imgproc.morphologyEx(mats[2], mats[5], Imgproc.MORPH_TOPHAT, kernel);
 		//Imgproc.erode(mats[7], mats[6], tmp2);
 		//Imgproc.erode(tmp2, mats[0], Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(4,1)));
