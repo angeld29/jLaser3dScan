@@ -1,1 +1,6 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.imgview {
+	-fx-padding: 1px;
+    -fx-border-insets: 1px;
+    -fx-background-insets: 1px;
+}

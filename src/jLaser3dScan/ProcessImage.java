@@ -18,7 +18,7 @@ import org.opencv.core.Size;
 public class ProcessImage {
 	private MainController controller;
 	private ScanSettings settings;
-	private static final int NUM_MATS = 8;
+	private static final int NUM_MATS = 12;
 	private Mat tmp1 = new Mat();
 	private Mat tmp2 = new Mat();
 	private Mat tmp3 = new Mat();
@@ -72,9 +72,9 @@ public class ProcessImage {
 		//Imgproc.cvtColor(hsvm, tmp1, Imgproc.COLOR_GRAY2RGB);
 		Core.bitwise_and(mats[4], hsvm, tmp2);
 		Imgproc.threshold(tmp2, tmp3, 250, 255, Imgproc.THRESH_BINARY+Imgproc.THRESH_OTSU);
-		mats[0] = tmp2;
-		mats[6] = hsvm;
-		mats[7] = tmp3;
+		tmp2.copyTo(mats[0]);
+		hsvm.copyTo(mats[6]);
+		tmp3.copyTo(mats[7]);
 		//Imgproc.morphologyEx(mats[2], mats[5], Imgproc.MORPH_TOPHAT, kernel);
 		//Imgproc.erode(mats[7], mats[6], tmp2);
 		//Imgproc.erode(tmp2, mats[0], Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(4,1)));

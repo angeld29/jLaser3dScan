@@ -46,6 +46,10 @@ public class MainController {
 	@FXML private ImageView img6;
 	@FXML private ImageView img7;
 	@FXML private ImageView img8;
+	@FXML private ImageView img9;
+	@FXML private ImageView img10;
+	@FXML private ImageView img11;
+	@FXML private ImageView img12;
 	@FXML private Slider hmin;
 	@FXML private Slider hmax;
 	@FXML private Slider umin;
@@ -164,6 +168,10 @@ public class MainController {
     	if( id == 6 ) {img6.setImage(img); }
     	if( id == 7 ) {img7.setImage(img); }
     	if( id == 8 ) {img8.setImage(img); }
+    	if( id == 9 ) {img9.setImage(img); }
+    	if( id == 10 ) {img10.setImage(img); }
+    	if( id == 11 ) {img11.setImage(img); }
+    	if( id == 12 ) {img12.setImage(img); }
     }
     @FXML
     protected void startScan() {
