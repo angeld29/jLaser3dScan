@@ -21,6 +21,8 @@ public class ProcessImage {
 	private MainController controller;
 	private ScanSettings settings;
 	private static final int NUM_MATS = 12;
+	private static final double MIN_LINE_LEN = 2;
+	private static final double MIN_LINE_COS_ANGLE = 0.996;//1 градус
 	private Mat tmp1 = new Mat();
 	private Mat tmp2 = new Mat();
 	private Mat tmp3 = new Mat();
@@ -104,8 +106,29 @@ public class ProcessImage {
 			}
 		}
 	}
-	private boolean compareLines(int[] line1, int[] line2){
+	private boolean checkLines(int[] line1, int[] line2){
 			 int maxdiff = 20;
+			 double[] v1 = { line1[2] -line1[0], line1[3]-line1[1]};
+			 double[] v2 = { line2[2] -line2[0], line2[3]-line2[1]};
+			 double v1len =Math.sqrt(v1[0]*v1[0]+v1[1]*v1[1]);
+			 double v2len =Math.sqrt(v2[0]*v2[0]+v2[1]*v2[1]);
+			 //проверим не слишком ли короткие 
+			 if(v1len < MIN_LINE_LEN || v2len < MIN_LINE_LEN  ) return true;
+			 double cos_a = (v1[0]*v2[0] +v1[1]*v2[1])/v1len/v2len;
+			 if( cos_a  < MIN_LINE_COS_ANGLE) return false;// не коллинеальны
+			 //проекция line2 на line1
+			 //прямая через 1 точку line2
+			 //v1[0] *(x - line2[0]) + v1[1]*(y - line2[1]) = 0
+			 //v1[0]*x +v1[1]*y = v1[0] * line2[0] + v1[1] * line2[1]
+			 //прямая через 2 точку line2
+			 //v1[0] *(x - line2[2]) + v1[1]*(y - line2[3]) = 0
+			 //v1[0]*x +v1[1]*y = v1[0] * line2[2] + v1[1] * line2[1]
+			 
+			 //ур-е прямой 1
+			 // (x-line1[0])*(line1[3] - line1[1]) - (y - line1[2])*(line1[2] - line1[0]) = 0
+			 // (line1[3] - line1[1])*x +(line1[0]-line1[2])*y = line1[0]*((line1[3] - line1[1])) +line1[2]*(line1[0]-line1[2])
+			 
+			 
 				 if(Math.abs(line1[0]-line2[0]) < maxdiff  && 
 						 Math.abs(line1[1]-line2[1]) < maxdiff  && 
 						 Math.abs(line1[2]-line2[2]) < maxdiff  && 
@@ -130,7 +153,7 @@ public class ProcessImage {
 			    //use hasNext() and next() methods of Iterator to iterate through the elements
 			 while(itr.hasNext()){
 				 int[] itm = (int[]) itr.next();
-				 if(compareLines(itm, veci)){
+				 if(checkLines(itm, veci)){
 					 hasLine = true;
 					 break;
 				 }
