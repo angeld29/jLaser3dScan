@@ -58,6 +58,10 @@ public class MainController {
 	@FXML private Slider vmax;
     @FXML private Button startScanBtn;
     @FXML private TextField fHAngle;
+    @FXML private TextField fiAngle;
+    @FXML private TextField hLen;
+    @FXML private TextField shaftX;
+    @FXML private TextField shaftY;
     @FXML private TextField iCamID;
     @FXML private Label sFilename;
     @FXML private ChoiceBox<String> sPort;
@@ -132,6 +136,10 @@ public class MainController {
     	settings.Load();
     	bIsFile.setSelected(settings.isFile);
     	fHAngle.setText(String.format("%.0f",settings.hAngle));
+    	fiAngle.setText(String.format("%.0f",settings.fiAngle));;
+    	hLen.setText(String.format("%.0f",settings.hLen));;
+    	shaftX.setText(String.format("%.0f",settings.shaftX));;
+    	shaftY.setText(String.format("%.0f",settings.shaftY));;
     	iCamID.setText(String.valueOf(settings.camID));
     	sPort.getItems().clear();
     	sPort.getItems().add("emul");
@@ -149,6 +157,10 @@ public class MainController {
     @FXML protected void SaveSettings(){
     	settings.isFile = bIsFile.isSelected();
     	settings.hAngle = Double.parseDouble(fHAngle.getText());
+    	settings.fiAngle = Double.parseDouble(fiAngle.getText());
+    	settings.hLen = Double.parseDouble(hLen.getText());
+    	settings.shaftX = Double.parseDouble(shaftX.getText());
+    	settings.shaftY = Double.parseDouble(shaftY.getText());
     	settings.camID = Integer.parseInt(iCamID.getText());
     	settings.port = sPort.getValue();
     	settings.filename = videoFilename;

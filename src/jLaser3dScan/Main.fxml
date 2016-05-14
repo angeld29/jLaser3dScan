@@ -41,6 +41,54 @@
                   <TextField fx:id="fHAngle" prefHeight="25.0" prefWidth="40.0" text="56" />
                </children>
             </HBox>
+            <HBox prefHeight="27.0" prefWidth="217.0">
+               <children>
+                  <Label text="Phi">
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="fiAngle" prefHeight="25.0" prefWidth="40.0" text="55">
+                     <HBox.margin>
+                        <Insets left="2.0" right="2.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Label text="hLen">
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="hLen" prefHeight="25.0" prefWidth="38.0" text="16">
+                     <HBox.margin>
+                        <Insets left="2.0" right="2.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="27.0" prefWidth="217.0">
+               <children>
+                  <Label text="ShaftX">
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="shaftX" prefHeight="25.0" prefWidth="31.0" text="23">
+                     <HBox.margin>
+                        <Insets left="2.0" right="2.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Label text="ShaftY">
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="shaftY" prefHeight="25.0" prefWidth="30.0" text="0">
+                     <HBox.margin>
+                        <Insets left="2.0" right="2.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
             <HBox prefHeight="30.0" prefWidth="217.0">
                <children>
                   <CheckBox fx:id="bIsFile" mnemonicParsing="false" prefHeight="27.0" prefWidth="39.0" text="File">

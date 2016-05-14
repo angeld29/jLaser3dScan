@@ -14,6 +14,10 @@ public class ScanSettings {
 	public String filename;
 	public String port; 
 	public double hAngle;
+	public double fiAngle;
+	public double hLen;
+	public double shaftX;
+	public double shaftY;
 	public boolean drawed = false;
 	public ScanSettings(){
 		userPrefs = Preferences.userRoot().node("jLaser3dScan");
@@ -32,6 +36,10 @@ public class ScanSettings {
 		userPrefs.putInt("umax", umax);
 		userPrefs.putInt("vmin", vmin);
 		userPrefs.putInt("vmax", vmax);
+		userPrefs.putDouble("shaftX", shaftX);
+		userPrefs.putDouble("fiAngle", fiAngle);
+		userPrefs.putDouble("hLen", hLen);
+		userPrefs.putDouble("shaftY", shaftY);
 	}
 	public void Load(){
 		camID = userPrefs.getInt("camID", 0);
@@ -45,5 +53,9 @@ public class ScanSettings {
 		umax = userPrefs.getInt("umax", 255);
 		vmin = userPrefs.getInt("vmin", 200);
 		vmax = userPrefs.getInt("vmax", 255);
+		hLen = userPrefs.getDouble("hLen", 16.0);
+		fiAngle = userPrefs.getDouble("fiAngle", 55.0);
+		shaftX = userPrefs.getDouble("shaftX", 23.0);
+		shaftY = userPrefs.getDouble("shaftY", 0.0);
 	}
 }
