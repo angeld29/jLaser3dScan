@@ -27,12 +27,19 @@ import jssc.SerialPortList;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.file.*;
+import java.nio.file.Path;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.shape.Sphere;
+import javafx.scene.Group;
+import javafx.scene.PerspectiveCamera;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 
 public class MainController {
 
@@ -64,6 +71,7 @@ public class MainController {
     @FXML private TextField shaftY;
     @FXML private TextField iCamID;
     @FXML private Label sFilename;
+    @FXML private Group group3D;
     @FXML private ChoiceBox<String> sPort;
     @FXML CheckBox bIsFile;
 
@@ -71,9 +79,11 @@ public class MainController {
     private boolean isScaning = false;
     private ScanSettings settings; 
     private String videoFilename;
-	
+
     public void initialize() {
 		//System.out.println("init MainController");
+    	Sphere sphere=new Sphere(100);
+    	group3D.getChildren().add(sphere);
 		settings = new ScanSettings();
 		LoadSettings();
 		hmin.valueProperty().addListener(new ChangeListener<Number>() {
