@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point3D;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,6 +36,7 @@ import org.opencv.core.MatOfByte;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.shape.Sphere;
+import javafx.scene.shape.Box;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
@@ -82,8 +84,7 @@ public class MainController {
 
     public void initialize() {
 		//System.out.println("init MainController");
-    	Sphere sphere=new Sphere(100);
-    	group3D.getChildren().add(sphere);
+    	init3D();
 		settings = new ScanSettings();
 		LoadSettings();
 		hmin.valueProperty().addListener(new ChangeListener<Number>() {
@@ -117,6 +118,18 @@ public class MainController {
                     settings.drawed = false;
             } });
 		startCapture();
+    }
+    private void init3D(){
+    	Box c = new Box(50,50,50);
+    	c.setRotationAxis(new Point3D(30, 30, 30));
+    	c.setRotate(30);
+    	Sphere sphere=new Sphere(100);
+    	group3D.getChildren().add(sphere);
+    	group3D.getChildren().add(c);
+    	// translate and rotate group so that origin is center and +Y is up
+        group3D.setTranslateX(200/2);
+        group3D.setTranslateY(300/2);
+        group3D.getTransforms().add(new Rotate(180,Rotate.X_AXIS));
     }
     private void startCapture(){
         captureThread = new CaptureThread( this, settings);

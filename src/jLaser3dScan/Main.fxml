@@ -180,7 +180,7 @@
             <Button fx:id="startScanBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startScan" prefHeight="25.0" prefWidth="103.0" text="Start Scan" />
             <Pane prefHeight="292.0" prefWidth="217.0">
                <children>
-                  <Group fx:id="group3D" autoSizeChildren="false" layoutX="100.0" layoutY="150.0" />
+                  <Group fx:id="group3D" autoSizeChildren="false" />
                </children>
             </Pane>
          </children>
