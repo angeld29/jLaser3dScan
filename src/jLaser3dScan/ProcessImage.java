@@ -43,6 +43,9 @@ public class ProcessImage {
 		Imgcodecs.imencode(".bmp", frame, buffer);
 		return new Image(new ByteArrayInputStream(buffer.toArray()));
 	}
+	/***********************************************************************
+	 * 0 2 4 -  H S V  1 3 5 ranged hsv - HSV, hsvm - ranged HSV
+	 ***********************************************************************/
 	private void FilterHSV(Mat mat){
 		Imgproc.cvtColor(mat, hsv, Imgproc.COLOR_BGR2HSV);
 		Core.extractChannel(hsv, mats[0], 0);
