@@ -70,20 +70,17 @@ public class CaptureThread extends Thread {
                 //handle it
             }        
         }
-        try{
-//        	outputVideo.open(filename, outputVideo.fourcc('M','P','4','V'), 20, new Size(frameW, frameH));
-        	//outputVideo.open("video/"+filename+".avi", outputVideo.fourcc('H','2','6','4'), 25, new Size(frameW, frameH));
-      	//outputVideo.open(filename, outputVideo.fourcc('A','V','C','1'), 20, new Size(frameW, frameH));
-      	outputVideo.open("video/"+filename+".avi", outputVideo.fourcc('X','V','I','D'), 25, new Size(frameW, frameH), true);
-      	//outputVideo.open("video/"+filename+".avi", outputVideo.fourcc('M','S','V','C'), 25, new Size(frameW, frameH), true);
-        //outputVideo.open(filename+".avi", -1, 30, new Size(frameW, frameH));
-        } catch (Exception e) {
-            e.printStackTrace();
-            // log the error
-            System.err.println("ERROR: " + e.getMessage());
-        }
-        if(!outputVideo.isOpened()){
-            System.err.println("ERROR openvideo: " + filename);
+        if( settings.isRecordVideo){
+        	try{
+        		outputVideo.open("video/"+filename+".avi", outputVideo.fourcc('X','V','I','D'), 25, new Size(frameW, frameH), true);
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        		// log the error
+        		System.err.println("ERROR: " + e.getMessage());
+        	}
+        	if(!outputVideo.isOpened()){
+        		System.err.println("ERROR openvideo: " + filename);
+        	}
         }
         
 
@@ -96,7 +93,10 @@ public class CaptureThread extends Thread {
 	}
 	@Override
 	public void run() {
-		int numSteps = 4;
+		int numSteps = (int) ( MAX_STEPS* settings.turnAngle / 360 );
+		if( numSteps < 2){
+			numSteps = 2;
+		}
 		SerialWriter writer;
 		if( settings.isFile ){
 			camera = new VideoCapture(settings.filename);
@@ -125,7 +125,7 @@ public class CaptureThread extends Thread {
 					//System.out.println(framen + " " + pos + " " + maxframes);
 					framen += 1;
 				}
-            	if(outputVideo.isOpened()){
+            	if(settings.isRecordVideo && outputVideo.isOpened()){
             		Imgproc.resize(mat, resframe, new Size(frameW, frameH));
             		outputVideo.write(resframe);
             	}

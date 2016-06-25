@@ -11,6 +11,7 @@ public class ScanSettings {
 	public int vmin;
 	public int vmax;
 	public boolean isFile;
+	public boolean isRecordVideo;
 	public String filename;
 	public String port; 
 	public double hAngle;
@@ -18,6 +19,7 @@ public class ScanSettings {
 	public double hLen;
 	public double shaftX;
 	public double shaftY;
+	public double turnAngle;
 	public boolean drawed = false;
 	public ScanSettings(){
 		userPrefs = Preferences.userRoot().node("jLaser3dScan");
@@ -27,6 +29,7 @@ public class ScanSettings {
 	public void Save(){
 		userPrefs.putInt("camID", camID);
 		userPrefs.putBoolean("isFile", isFile);
+		userPrefs.putBoolean("isRecordVideo", isRecordVideo);
 		userPrefs.putDouble("hAngle", hAngle);
 		userPrefs.put("filename", filename);
 		userPrefs.put("port", port);
@@ -40,10 +43,12 @@ public class ScanSettings {
 		userPrefs.putDouble("fiAngle", fiAngle);
 		userPrefs.putDouble("hLen", hLen);
 		userPrefs.putDouble("shaftY", shaftY);
+		userPrefs.putDouble("turnAngle", turnAngle);
 	}
 	public void Load(){
 		camID = userPrefs.getInt("camID", 0);
 		isFile = userPrefs.getBoolean("isFile", false);
+		isRecordVideo = userPrefs.getBoolean("isRecordVideo", false);
 		hAngle = userPrefs.getDouble("hAngle", 56.0);
 		filename = userPrefs.get("filename", "");
 		port = userPrefs.get("port", "emul");
@@ -57,5 +62,6 @@ public class ScanSettings {
 		fiAngle = userPrefs.getDouble("fiAngle", 55.0);
 		shaftX = userPrefs.getDouble("shaftX", 23.0);
 		shaftY = userPrefs.getDouble("shaftY", 0.0);
+		turnAngle = userPrefs.getDouble("turnAngle", 2.0);
 	}
 }

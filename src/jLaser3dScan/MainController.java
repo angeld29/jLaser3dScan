@@ -71,11 +71,13 @@ public class MainController {
     @FXML private TextField hLen;
     @FXML private TextField shaftX;
     @FXML private TextField shaftY;
+    @FXML private TextField turnAngle;
     @FXML private TextField iCamID;
     @FXML private Label sFilename;
     @FXML private Group group3D;
     @FXML private ChoiceBox<String> sPort;
     @FXML CheckBox bIsFile;
+    @FXML CheckBox bIsRecordVideo;
 
     private CaptureThread captureThread;
     private boolean isScaning = false;
@@ -84,7 +86,7 @@ public class MainController {
 
     public void initialize() {
 		//System.out.println("init MainController");
-    	init3D();
+    	//init3D();
 		settings = new ScanSettings();
 		LoadSettings();
 		hmin.valueProperty().addListener(new ChangeListener<Number>() {
@@ -158,11 +160,13 @@ public class MainController {
     @FXML protected void LoadSettings(){
     	settings.Load();
     	bIsFile.setSelected(settings.isFile);
+    	bIsRecordVideo.setSelected(settings.isRecordVideo);
     	fHAngle.setText(String.format("%.0f",settings.hAngle));
     	fiAngle.setText(String.format("%.0f",settings.fiAngle));;
     	hLen.setText(String.format("%.0f",settings.hLen));;
     	shaftX.setText(String.format("%.0f",settings.shaftX));;
     	shaftY.setText(String.format("%.0f",settings.shaftY));;
+    	turnAngle.setText(String.format("%.0f",settings.turnAngle));;
     	iCamID.setText(String.valueOf(settings.camID));
     	sPort.getItems().clear();
     	sPort.getItems().add("emul");
@@ -179,6 +183,7 @@ public class MainController {
     }
     @FXML protected void SaveSettings(){
     	settings.isFile = bIsFile.isSelected();
+    	settings.isRecordVideo = bIsRecordVideo.isSelected();
     	settings.hAngle = Double.parseDouble(fHAngle.getText());
     	settings.fiAngle = Double.parseDouble(fiAngle.getText());
     	settings.hLen = Double.parseDouble(hLen.getText());

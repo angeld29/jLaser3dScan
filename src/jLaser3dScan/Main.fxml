@@ -28,7 +28,7 @@
                      </HBox.margin>
                   </Label>
                   <TextField fx:id="iCamID" prefHeight="25.0" prefWidth="40.0" text="0" />
-                  <Label prefHeight="25.0" prefWidth="46.0" text="hAngle">
+                  <Label prefHeight="25.0" prefWidth="46.0" text="hAngle, °">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -44,7 +44,7 @@
             </HBox>
             <HBox prefHeight="27.0" prefWidth="217.0">
                <children>
-                  <Label text="Phi">
+                  <Label text="Phi, °">
                      <HBox.margin>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
                      </HBox.margin>
@@ -54,7 +54,7 @@
                         <Insets left="2.0" right="2.0" />
                      </HBox.margin>
                   </TextField>
-                  <Label text="hLen">
+                  <Label text="hLen, см">
                      <HBox.margin>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
                      </HBox.margin>
@@ -68,7 +68,7 @@
             </HBox>
             <HBox prefHeight="27.0" prefWidth="217.0">
                <children>
-                  <Label text="ShaftX">
+                  <Label text="ShaftX, см">
                      <HBox.margin>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
                      </HBox.margin>
@@ -78,12 +78,26 @@
                         <Insets left="2.0" right="2.0" />
                      </HBox.margin>
                   </TextField>
-                  <Label text="ShaftY">
+                  <Label text="ShaftY, см">
                      <HBox.margin>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
                      </HBox.margin>
                   </Label>
                   <TextField fx:id="shaftY" prefHeight="25.0" prefWidth="30.0" text="0">
+                     <HBox.margin>
+                        <Insets left="2.0" right="2.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox prefHeight="35.0" prefWidth="217.0">
+               <children>
+                  <Label text="Угол поворота, °">
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="turnAngle" prefHeight="25.0" prefWidth="31.0" text="23">
                      <HBox.margin>
                         <Insets left="2.0" right="2.0" />
                      </HBox.margin>
@@ -175,6 +189,15 @@
                         <Insets left="5.0" top="3.0" />
                      </padding>
                   </Slider>
+               </children>
+            </HBox>
+            <HBox prefHeight="28.0" prefWidth="217.0">
+               <children>
+                  <CheckBox fx:id="bIsRecordVideo" mnemonicParsing="false" text=" Записывать видео">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </CheckBox>
                </children>
             </HBox>
             <Button fx:id="startScanBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startScan" prefHeight="25.0" prefWidth="103.0" text="Start Scan" />
