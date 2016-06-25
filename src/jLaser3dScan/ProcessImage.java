@@ -175,19 +175,19 @@ public class ProcessImage {
 		//Imgproc.erode(tmp2, tmp3, tmp4);
 		//Imgproc.adaptiveThreshold(hsvm, tmp3, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 7, 5);
 		//Imgproc.cvtColor(hsvm, tmp1, Imgproc.COLOR_GRAY2RGB);
-		Core.bitwise_and(mats[4], hsvm, tmp2);
-		Imgproc.threshold(tmp2, tmp3, 250, 255, Imgproc.THRESH_BINARY+Imgproc.THRESH_OTSU);
-		tmp2.copyTo(mats[8]);
-		hsvm.copyTo(mats[6]);
-		tmp3.copyTo(mats[7]);
-		tmp2.copyTo(mats[9]);
-		FindPoints(mats[9]);
-		ArrayList<int[]> vecl = getLines(tmp3);
-		mat.copyTo(mats[10]);
+		Core.bitwise_and(mats[4], hsvm, tmp2);// V & M -> tmp2
+		Imgproc.threshold(tmp2, tmp3, 250, 255, Imgproc.THRESH_BINARY+Imgproc.THRESH_OTSU); //
+		tmp2.copyTo(mats[8]);// V & M
+		hsvm.copyTo(mats[6]); // Mask
+		tmp3.copyTo(mats[7]);// V&M thresh OTSU
+		tmp2.copyTo(mats[9]);// V&M
+		FindPoints(mats[9]);// точки
+		ArrayList<int[]> vecl = getLines(tmp3); //lines from OTSU	
+		mat.copyTo(mats[10]); 
 		for (int x = 0; x < vecl.size(); x++)
 	    {
 			int[] vec = vecl.get(x);
-			System.out.println(vec[0] + " " + vec[1]+ " " + vec[2] + " " + vec[3]);
+			//System.out.println(vec[0] + " " + vec[1]+ " " + vec[2] + " " + vec[3]);
 	          
 	          int x1 = vec[0], 
 	                 y1 = vec[1],
