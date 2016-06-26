@@ -25,6 +25,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.io.File;
 
@@ -40,8 +41,9 @@ public class CaptureThread extends Thread {
 	private ProcessImage procimg;
 	private double framen=0;
 	private double maxframes=0;
-	//������ �����
+	
     private VideoWriter outputVideo;
+    private ScanModel scanModel; 
     private Integer frameW = 640;
     private Integer frameH = 480;
     Mat resframe = new Mat();
@@ -63,13 +65,13 @@ public class CaptureThread extends Thread {
         //System.out.println(filename+ " " );
         File theDir = new File("video");
         if (!theDir.exists()) {
-            try{
-                theDir.mkdirs();
-            } 
-            catch(SecurityException se){
-                //handle it
-            }        
+            try{ theDir.mkdirs(); } catch(SecurityException se){ }        
         }
+        theDir = new File("scans");
+        if (!theDir.exists()) {
+            try{ theDir.mkdirs(); } catch(SecurityException se){  }        
+        }
+        
         if( settings.isRecordVideo){
         	try{
         		outputVideo.open("video/"+filename+".avi", outputVideo.fourcc('X','V','I','D'), 25, new Size(frameW, frameH), true);
@@ -82,8 +84,8 @@ public class CaptureThread extends Thread {
         		System.err.println("ERROR openvideo: " + filename);
         	}
         }
+		scanModel = new ScanModel(controller, settings,frameW, frameH);
         
-
 	}
 	public void stopScan() {
 		isScaning = false;
@@ -111,6 +113,7 @@ public class CaptureThread extends Thread {
 
 		while (!interrupted()) 
 		{
+			double angle = step *360 / MAX_STEPS;
 			if( mat.empty()  || !settings.isFile) {//��� ����� ������ ������ ������ ���� ��� �����������
 				if(!grabFrameMat()) continue;
 			}
@@ -138,7 +141,11 @@ public class CaptureThread extends Thread {
 					Platform.runLater(() -> controller.startScan());	
 				}
 			}
-			procimg.run(mat);
+			ArrayList<int[]> points = procimg.run(mat);
+			if( isScaning && scanModel != null ){
+				scanModel.AddPoints(angle, points);
+			}
+			
 		/*	try {
 				this.sleep(50);
 			} catch (InterruptedException e) {
@@ -147,6 +154,8 @@ public class CaptureThread extends Thread {
 			}
 */		}
 		//frameBuffer.stop();
+		scanModel.SaveTxt("scans/scan.XYZ");
+        scanModel = null;
 		writer.disconnect();
 		if( camera != null  && camera.isOpened()) {
 			camera.release();

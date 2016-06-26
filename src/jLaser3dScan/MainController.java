@@ -67,6 +67,7 @@ public class MainController {
 	@FXML private Slider vmax;
     @FXML private Button startScanBtn;
     @FXML private TextField fHAngle;
+    @FXML private TextField fVAngle;
     @FXML private TextField fiAngle;
     @FXML private TextField hLen;
     @FXML private TextField shaftX;
@@ -162,6 +163,7 @@ public class MainController {
     	bIsFile.setSelected(settings.isFile);
     	bIsRecordVideo.setSelected(settings.isRecordVideo);
     	fHAngle.setText(String.format("%.0f",settings.hAngle));
+    	fVAngle.setText(String.format("%.0f",settings.vAngle));
     	fiAngle.setText(String.format("%.0f",settings.fiAngle));;
     	hLen.setText(String.format("%.0f",settings.hLen));;
     	shaftX.setText(String.format("%.0f",settings.shaftX));;
@@ -185,6 +187,7 @@ public class MainController {
     	settings.isFile = bIsFile.isSelected();
     	settings.isRecordVideo = bIsRecordVideo.isSelected();
     	settings.hAngle = Double.parseDouble(fHAngle.getText());
+    	settings.vAngle = Double.parseDouble(fVAngle.getText());
     	settings.fiAngle = Double.parseDouble(fiAngle.getText());
     	settings.hLen = Double.parseDouble(hLen.getText());
     	settings.shaftX = Double.parseDouble(shaftX.getText());

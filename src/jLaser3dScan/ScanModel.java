@@ -2,20 +2,84 @@ package jLaser3dScan;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
 public class ScanModel {
 	private MainController controller;
 	private ScanSettings settings;
-	public ScanModel ( MainController controller, ScanSettings settings) {
+	private ArrayList<double[]> points3d;
+	private int width;
+	private int height;
+	public ScanModel ( MainController controller, ScanSettings settings, int width, int height ) {
 		this.controller = controller;
 		this.settings = settings;
+		this.width = width;
+		this.height = height;
+		this.points3d = new ArrayList<double[]>();
 	}
-	void AddPoints(double angle, Mat mat ){
-		
+	public void clear(){
+		points3d.clear();
 	}
-	void SaveTxt(String filename){
-		
+	public void AddPoints(double angle, ArrayList<int[]> points ){
+		for (int i = 0; i < points.size(); i++)
+		{
+			int[] point = points.get(i);
+			double[] point3d = GetPoint(point[0], point[1], angle*Math.PI/180);
+			points3d.add(point3d);
+		}
 	}
+	double [] GetPoint(int x, int y, double angle){
+		double a_man = -1 * Math.tan(Math.toRadians(settings.hAngle/2)) / settings.hLen;
+		double b_man = Math.tan(Math.toRadians(settings.fiAngle)) / settings.hLen;
+		double tan_alfa = Math.tan(Math.toRadians(settings.vAngle/2));
+		double shaft_x = settings.shaftX;
+		double shaft_y = settings.shaftY;
 
+		double x3 =  1 / (b_man + a_man * (width / 2 - x) / (width / 2));
+		double y3 = (width/ 2 - y) / (width / 2) * x3 * a_man * -1 * settings.hLen;
+		double z3  = ((height / 2) - (double) x) / (height / 2) *  x3 * tan_alfa;
+
+		double x3_turn = (x3 - shaft_x)*Math.cos(angle)- (y3-shaft_y)*Math.sin(angle);
+		double y3_turn = (y3 - shaft_y)*Math.cos(angle)- (x3-shaft_x)*Math.sin(angle);
+		return new double[] { x3_turn, y3_turn, z3 };
+	}
+	void SaveTxt(String fileName){
+		Path path;
+		try {
+			path = Paths.get(fileName + ".XYZ");
+			try {
+				Files.createFile(path);
+			} catch (FileAlreadyExistsException e) {
+				System.err.println("already exists: " + e.getMessage());
+				return;
+			}
+		} catch (IOException e) {
+			System.out.println("Error creating file");
+			e.printStackTrace();
+			return;
+		}
+
+		try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(path.toString(), true)))) {
+			//output to the file a line
+			for (int i = 0; i < points3d.size(); i++)
+			{
+				double[] point = points3d.get(i);
+				out.printf("%f %f %f\n", point[0],point[1],point[2]);
+				System.out.printf("%f %f %f\n", point[0],point[1],point[2]);
+			}
+			out.close();
+		} catch (IOException e) {
+			//TODO exception handling
+		}
+	}
 }
 /*
 public class FormulaSolver {

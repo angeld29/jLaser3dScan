@@ -70,7 +70,10 @@ public class ProcessImage {
 		Core.bitwise_and(mats[1], mats[3], tmp1);
 		Core.bitwise_and(tmp1, mats[5], hsvm);
 	}
-	public void FindPoints(Mat in){
+	private ArrayList<int[]> FindPoints(Mat in){
+
+		ArrayList<int[]> points = new ArrayList <int[]>();
+
 		for (int j = 0; j < mat.rows(); j++) {
 			int firstOff = -1;
 			int lastOff = -1;
@@ -87,6 +90,7 @@ public class ProcessImage {
 							//System.out.println(j+ " " + maxVal + " " + lastOff + " " + firstOff);
 							int off = (firstOff + lastOff)/2;
 							in.put(j, firstOff,  255);
+							points.add(new int[]{ j, k });
 							maxVal = -1;
 							firstOff = -1;
 							lastOff = -1;
@@ -108,6 +112,7 @@ public class ProcessImage {
 				System.out.println(maxVal + " " + lastOff + " " + firstOff);
 			}
 		}
+		return points;
 	}
 	private boolean checkLines(int[] line1, int[] line2){
 			 int maxdiff = 20;
@@ -166,12 +171,10 @@ public class ProcessImage {
 
 		return vec;
 	}
-	public void run (Mat mat){
+	public ArrayList<int[]> run (Mat mat){
 		this.mat = mat;
 		FilterHSV(mat);
 
-		if(settings.drawed) return;
-		settings.drawed = true;
 		//Imgproc.erode(tmp2, tmp3, tmp4);
 		//Imgproc.adaptiveThreshold(hsvm, tmp3, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 7, 5);
 		//Imgproc.cvtColor(hsvm, tmp1, Imgproc.COLOR_GRAY2RGB);
@@ -181,7 +184,7 @@ public class ProcessImage {
 		hsvm.copyTo(mats[6]); // Mask
 		tmp3.copyTo(mats[7]);// V&M thresh OTSU
 		tmp2.copyTo(mats[9]);// V&M
-		FindPoints(mats[9]);// точки
+		ArrayList<int[]> points = FindPoints(mats[9]);// точки
 		ArrayList<int[]> vecl = getLines(tmp3); //lines from OTSU	
 		mat.copyTo(mats[10]); 
 		for (int x = 0; x < vecl.size(); x++)
@@ -219,7 +222,11 @@ public class ProcessImage {
 		//			Imgproc.adaptiveThreshold(mat2, mat3, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 11, 2);
 		//Imgproc.threshold(mat2, mat3, 0,255, Imgproc.THRESH_BINARY+Imgproc.THRESH_OTSU);
 		//Imgproc.Laplacian(mat2,mat3, 128);
-		DrawMats();
+		if(!settings.drawed){
+			settings.drawed = true;
+			DrawMats();
+		}
+		return points;
 	}
 	private void DrawMats() {
 		if(!mat.empty()) controller.setImage(0, mat2Image(mat));

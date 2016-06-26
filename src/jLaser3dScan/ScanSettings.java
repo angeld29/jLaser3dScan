@@ -15,6 +15,7 @@ public class ScanSettings {
 	public String filename;
 	public String port; 
 	public double hAngle;
+	public double vAngle;
 	public double fiAngle;
 	public double hLen;
 	public double shaftX;
@@ -31,6 +32,7 @@ public class ScanSettings {
 		userPrefs.putBoolean("isFile", isFile);
 		userPrefs.putBoolean("isRecordVideo", isRecordVideo);
 		userPrefs.putDouble("hAngle", hAngle);
+		userPrefs.putDouble("vAngle", vAngle);
 		userPrefs.put("filename", filename);
 		userPrefs.put("port", port);
 		userPrefs.putInt("hmin", hmin);
@@ -50,6 +52,7 @@ public class ScanSettings {
 		isFile = userPrefs.getBoolean("isFile", false);
 		isRecordVideo = userPrefs.getBoolean("isRecordVideo", false);
 		hAngle = userPrefs.getDouble("hAngle", 56.0);
+		vAngle = userPrefs.getDouble("vAngle", 32.0);
 		filename = userPrefs.get("filename", "");
 		port = userPrefs.get("port", "emul");
 		hmin = userPrefs.getInt("hmin", 0 );

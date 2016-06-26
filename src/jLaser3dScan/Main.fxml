@@ -28,7 +28,11 @@
                      </HBox.margin>
                   </Label>
                   <TextField fx:id="iCamID" prefHeight="25.0" prefWidth="40.0" text="0" />
-                  <Label prefHeight="25.0" prefWidth="46.0" text="hAngle, °">
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="217.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="56.0" text="hAngle, °">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -40,6 +44,15 @@
                      </HBox.margin>
                   </Label>
                   <TextField fx:id="fHAngle" prefHeight="25.0" prefWidth="40.0" text="56" />
+                  <Label prefHeight="25.0" prefWidth="56.0" text="vAngle, °">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets left="4.0" right="4.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="fVAngle" prefHeight="25.0" prefWidth="40.0" text="40" />
                </children>
             </HBox>
             <HBox prefHeight="27.0" prefWidth="217.0">
