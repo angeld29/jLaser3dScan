@@ -137,13 +137,13 @@ public class CaptureThread extends Thread {
 					//System.out.println(framen + " " + pos + " " + maxframes);
 					angle = framen * 360 / maxframes;
 				}
-            	if(settings.isRecordVideo && outputVideo.isOpened()){
-            		Imgproc.resize(mat, resframe, new Size(frameW, frameH));
-            		outputVideo.write(resframe);
-            	}
             	ArrayList<int[]> points = procimg.run(mat);
             	if( scanModel != null ){
             		scanModel.AddPoints(angle, points);
+            	}
+            	if(settings.isRecordVideo && outputVideo.isOpened()){
+            		Imgproc.resize(mat, resframe, new Size(frameW, frameH));
+            		outputVideo.write(resframe);
             	}
 				if( settings.isFile){
 					framen += 1;

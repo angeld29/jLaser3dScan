@@ -30,6 +30,7 @@ public class ProcessImage {
 	private Mat mat;
 	private Mat hsv = new Mat();
 	private Mat hsvm = new Mat();
+	private int imgn = 0;
 	private Mat[] mats = new Mat[NUM_MATS];
 	public ProcessImage ( MainController controller, ScanSettings settings) {
 		this.controller = controller;
@@ -97,8 +98,8 @@ public class ProcessImage {
 						if(maxVal > 0 ) {
 							//System.out.println(j+ " " + maxVal + " " + lastOff + " " + firstOff);
 							int off = (firstOff + lastOff)/2;
-							in.put(j, firstOff,  255);
-							points.add(new int[]{ j, k });
+							in.put(j, off,  255);
+							points.add(new int[]{ j, off });
 							maxVal = -1;
 							firstOff = -1;
 							lastOff = -1;
@@ -193,6 +194,9 @@ public class ProcessImage {
 		tmp3.copyTo(mats[7]);// V&M thresh OTSU
 		tmp2.copyTo(mats[9]);// V&M
 		ArrayList<int[]> points = FindPoints(mats[9]);// точки
+		
+		//Imgcodecs.imwrite(String.format("images/%08d.png", imgn++),mats[9]);
+		
 		ArrayList<int[]> vecl = getLines(tmp3); //lines from OTSU	
 		mat.copyTo(mats[10]); 
 		for (int x = 0; x < vecl.size(); x++)

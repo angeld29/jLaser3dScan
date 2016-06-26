@@ -36,13 +36,19 @@ public class ScanModel {
 			double[] point3d = GetPoint(point[0], point[1], Math.toRadians(angle));
 			points3d.add(point3d);
 		}
+		points3d.add(new double[]{0,0,0});
+	}
+	double [] turnPoints(double[] point, double angle){
+		double shaft_x = settings.shaftX;
+		double shaft_y = settings.shaftY;
+		double x = (point[0] - shaft_x)*Math.cos(angle)- (point[1]-shaft_y)*Math.sin(angle);
+		double y = (point[1] - shaft_y)*Math.cos(angle)- (point[0]-shaft_x)*Math.sin(angle);
+		return new double[]{x, y, point[2]};
 	}
 	double [] GetPoint(int x, int y, double angle){
 		double a_man = -1 * Math.tan(Math.toRadians(settings.hAngle/2)) / settings.hLen;
 		double b_man = Math.tan(Math.toRadians(settings.fiAngle)) / settings.hLen;
 		double tan_alfa = Math.tan(Math.toRadians(settings.vAngle/2));
-		double shaft_x = settings.shaftX;
-		double shaft_y = settings.shaftY;
 
 		double x3 =  1 / (b_man + a_man * (width / 2 - x) / (width / 2));
 		double y3 = ((width/2 - (double)x) / (width / 2)) * x3 * a_man * -1 * settings.hLen;
@@ -50,11 +56,22 @@ public class ScanModel {
 		double z3  = ((height / 2) - (double) x) / (height / 2) *  x3 * tan_alfa;
 		//System.out.printf("%.0f %d %d %.2f %f %f %f %f\n", width, x,y, settings.hLen, x3,y3,z3,a_man);
 
-		//double x3_turn = (x3 - shaft_x)*Math.cos(angle)- (y3-shaft_y)*Math.sin(angle);
-		//double y3_turn = (y3 - shaft_y)*Math.cos(angle)- (x3-shaft_x)*Math.sin(angle);
+		
+		double alpha  = 90 + (settings.hAngle/2) * ( width/2 - (double)x)/ (width/2);
+		double alpha_r = Math.toRadians(alpha);
+		double gamma = 180 - (90 - settings.fiAngle) - alpha;
+		double gamma_r = Math.toRadians(gamma);
+		double betta_r = Math.toRadians(90- settings.fiAngle);
+		double a_len = settings.hLen * Math.sin(alpha_r)/Math.sin(gamma_r);
+		double yy = settings.hLen * a_len * Math.sin(betta_r);
+		double xx = settings.hLen -  a_len * Math.cos(betta_r);
+		double vAngle = settings.vAngle*(height/2 - y)/(height/2);
+		double vAngle_r = Math.toRadians(vAngle);
+		double zz = yy * Math.tan(vAngle_r);
 
-//		return new double[] { x3_turn, y3_turn, z3 };
-		return new double[] { x3, y3, z3 };
+		//return turnPoints(new double[]{xx,yy,zz}, angle);
+		return new double[]{xx,yy,zz};
+//		return new double[] { x3, y3, z3 };
 	}
 	void SaveTxt(String fileName){
 		Path path;
