@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ScanModel {
 	private MainController controller;
@@ -32,7 +33,7 @@ public class ScanModel {
 		for (int i = 0; i < points.size(); i++)
 		{
 			int[] point = points.get(i);
-			double[] point3d = GetPoint(point[0], point[1], angle*Math.PI/180);
+			double[] point3d = GetPoint(point[0], point[1], Math.toRadians(angle));
 			points3d.add(point3d);
 		}
 	}
@@ -53,8 +54,9 @@ public class ScanModel {
 	}
 	void SaveTxt(String fileName){
 		Path path;
+		Locale.setDefault(Locale.US);
 		try {
-			path = Paths.get(fileName + ".XYZ");
+			path = Paths.get(fileName);
 			try {
 				Files.createFile(path);
 			} catch (FileAlreadyExistsException e) {
@@ -73,7 +75,7 @@ public class ScanModel {
 			{
 				double[] point = points3d.get(i);
 				out.printf("%f %f %f\n", point[0],point[1],point[2]);
-				System.out.printf("%f %f %f\n", point[0],point[1],point[2]);
+//				System.out.printf("%f %f %f\n", point[0],point[1],point[2]);
 			}
 			out.close();
 		} catch (IOException e) {

@@ -68,7 +68,15 @@ public class ProcessImage {
 
 		Core.merge(ioutplanes, hsvf);*/
 		Core.bitwise_and(mats[1], mats[3], tmp1);
-		Core.bitwise_and(tmp1, mats[5], hsvm);
+		
+		Core.bitwise_and(tmp1, mats[5], tmp3);
+		tmp3.copyTo(hsvm);
+		for( int i =0; i< 230; i++){
+			Imgproc.line(hsvm, new Point(i,0), new Point(i, hsvm.rows()), new Scalar(0),1);
+		
+		}
+		//Imgproc.line(hsvm, new Point(0,0), new Point(hsvm.cols(), hsvm.rows()), new Scalar(255,0,0), 3);
+		//230
 	}
 	private ArrayList<int[]> FindPoints(Mat in){
 

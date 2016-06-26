@@ -46,6 +46,7 @@ public class CaptureThread extends Thread {
     private ScanModel scanModel; 
     private Integer frameW = 640;
     private Integer frameH = 480;
+    private String filename;
     Mat resframe = new Mat();
 
 	public CaptureThread( MainController controller, ScanSettings settings) {
@@ -61,7 +62,7 @@ public class CaptureThread extends Thread {
 		isScaning = true;
 
         Date date = new Date(); 
-        String filename = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss.SSS").format(date) ;
+        filename = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss.SSS").format(date) ;
         //System.out.println(filename+ " " );
         File theDir = new File("video");
         if (!theDir.exists()) {
@@ -89,6 +90,10 @@ public class CaptureThread extends Thread {
 	}
 	public void stopScan() {
 		isScaning = false;
+		if( scanModel != null ){
+			scanModel.SaveTxt("scans/" + filename + ".XYZ");
+			scanModel = null;
+		}
         if( outputVideo.isOpened() ){
         	outputVideo.release();
         }
@@ -114,37 +119,47 @@ public class CaptureThread extends Thread {
 		while (!interrupted()) 
 		{
 			double angle = step *360 / MAX_STEPS;
-			if( mat.empty()  || !settings.isFile) {//��� ����� ������ ������ ������ ���� ��� �����������
+			if( mat.empty()  || !settings.isFile) {
 				if(!grabFrameMat()) continue;
 			}
 			if( isScaning && writer.isRotateReady()){
 				if( settings.isFile ){
-					if(!grabFrameMat()){//��� ������������ ������ ����� �� ����� 
+					if(!grabFrameMat()){
 						isScaning= false;
 						Platform.runLater(() -> controller.startScan());	
 						continue;
 					}
 					//double pos = camera.get(Videoio.CAP_PROP_POS_FRAMES);	
 					//System.out.println(framen + " " + pos + " " + maxframes);
-					framen += 1;
+					angle = framen * 360 / maxframes;
 				}
             	if(settings.isRecordVideo && outputVideo.isOpened()){
             		Imgproc.resize(mat, resframe, new Size(frameW, frameH));
             		outputVideo.write(resframe);
             	}
-				
-				writer.rotate(numSteps);
-				step += numSteps;
-			//	System.out.println(step);
-				if( step >= MAX_STEPS ){
-					isScaning= false;
-					Platform.runLater(() -> controller.startScan());	
+            	ArrayList<int[]> points = procimg.run(mat);
+            	if( scanModel != null ){
+            		scanModel.AddPoints(angle, points);
+            	}
+				if( settings.isFile){
+					framen += 1;
+					if( framen >= maxframes ){
+						stopScan();
+						Platform.runLater(() -> controller.startScan());	
+					}
+				}else{
+					writer.rotate(numSteps);
+					step += numSteps;
+					//	System.out.println(step);
+					if( step >= MAX_STEPS ){
+						stopScan();
+						Platform.runLater(() -> controller.startScan());	
+					}
 				}
+			}else{
+				procimg.run(mat);
 			}
-			ArrayList<int[]> points = procimg.run(mat);
-			if( isScaning && scanModel != null ){
-				scanModel.AddPoints(angle, points);
-			}
+			
 			
 		/*	try {
 				this.sleep(50);
@@ -154,8 +169,6 @@ public class CaptureThread extends Thread {
 			}
 */		}
 		//frameBuffer.stop();
-		scanModel.SaveTxt("scans/scan.XYZ");
-        scanModel = null;
 		writer.disconnect();
 		if( camera != null  && camera.isOpened()) {
 			camera.release();
