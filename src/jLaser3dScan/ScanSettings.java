@@ -10,6 +10,8 @@ public class ScanSettings {
 	public int umax;
 	public int vmin;
 	public int vmax;
+	public int camW;
+	public int camH;
 	public boolean isFile;
 	public boolean isRecordVideo;
 	public String filename;
@@ -29,6 +31,8 @@ public class ScanSettings {
 	}
 	public void Save(){
 		userPrefs.putInt("camID", camID);
+		userPrefs.putInt("camW", camW);
+		userPrefs.putInt("camH", camH);
 		userPrefs.putBoolean("isFile", isFile);
 		userPrefs.putBoolean("isRecordVideo", isRecordVideo);
 		userPrefs.putDouble("hAngle", hAngle);
@@ -49,6 +53,8 @@ public class ScanSettings {
 	}
 	public void Load(){
 		camID = userPrefs.getInt("camID", 0);
+		camW = userPrefs.getInt("camW", 0);
+		camH = userPrefs.getInt("camH", 0);
 		isFile = userPrefs.getBoolean("isFile", false);
 		isRecordVideo = userPrefs.getBoolean("isRecordVideo", false);
 		hAngle = userPrefs.getDouble("hAngle", 56.0);

@@ -112,6 +112,10 @@ public class CaptureThread extends Thread {
 		}else{
 			camera = new VideoCapture(settings.camID);
 			writer = new SerialWriter(settings.port);
+			if( settings.camW > 0 && settings.camH > 0){
+				camera.set(Videoio.CAP_PROP_FRAME_WIDTH, settings.camW);
+				camera.set(Videoio.CAP_PROP_FRAME_HEIGHT, settings.camH);
+			}
 		}
 	    frameW = (int) camera.get(Videoio.CAP_PROP_FRAME_WIDTH);
 	    frameH = (int) camera.get(Videoio.CAP_PROP_FRAME_HEIGHT);

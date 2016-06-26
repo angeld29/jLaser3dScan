@@ -10,7 +10,9 @@ public class SerialWriter {
 	SerialPort serialPort = null;
 	private volatile boolean isReady = true;
 	public SerialWriter(String port) {
-		if(port != "emul" ){
+		if( "emul" == port ){
+			serialPort = null;
+		}else{
 			try {
 				serialPort = new SerialPort(port);
 				System.out.println("Port opened: " + serialPort.openPort());

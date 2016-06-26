@@ -17,13 +17,13 @@ public class ScanModel {
 	private MainController controller;
 	private ScanSettings settings;
 	private ArrayList<double[]> points3d;
-	private int width;
-	private int height;
+	private double width;
+	private double height;
 	public ScanModel ( MainController controller, ScanSettings settings, int width, int height ) {
 		this.controller = controller;
 		this.settings = settings;
-		this.width = width;
-		this.height = height;
+		this.width = (double)width;
+		this.height = (double)height;
 		this.points3d = new ArrayList<double[]>();
 	}
 	public void clear(){
@@ -45,12 +45,16 @@ public class ScanModel {
 		double shaft_y = settings.shaftY;
 
 		double x3 =  1 / (b_man + a_man * (width / 2 - x) / (width / 2));
-		double y3 = (width/ 2 - y) / (width / 2) * x3 * a_man * -1 * settings.hLen;
+		double y3 = ((width/2 - (double)x) / (width / 2)) * x3 * a_man * -1 * settings.hLen;
+     //profileCoords[j][1] = (FrameBuffer.frameWidth / 2 - frameCoords[i]) / (FrameBuffer.frameWidth / 2) * profileCoords[j][0] * a_man * -1 * h;
 		double z3  = ((height / 2) - (double) x) / (height / 2) *  x3 * tan_alfa;
+		//System.out.printf("%.0f %d %d %.2f %f %f %f %f\n", width, x,y, settings.hLen, x3,y3,z3,a_man);
 
-		double x3_turn = (x3 - shaft_x)*Math.cos(angle)- (y3-shaft_y)*Math.sin(angle);
-		double y3_turn = (y3 - shaft_y)*Math.cos(angle)- (x3-shaft_x)*Math.sin(angle);
-		return new double[] { x3_turn, y3_turn, z3 };
+		//double x3_turn = (x3 - shaft_x)*Math.cos(angle)- (y3-shaft_y)*Math.sin(angle);
+		//double y3_turn = (y3 - shaft_y)*Math.cos(angle)- (x3-shaft_x)*Math.sin(angle);
+
+//		return new double[] { x3_turn, y3_turn, z3 };
+		return new double[] { x3, y3, z3 };
 	}
 	void SaveTxt(String fileName){
 		Path path;

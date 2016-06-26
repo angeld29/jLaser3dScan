@@ -74,6 +74,8 @@ public class MainController {
     @FXML private TextField shaftY;
     @FXML private TextField turnAngle;
     @FXML private TextField iCamID;
+    @FXML private TextField iCamW;
+    @FXML private TextField iCamH;
     @FXML private Label sFilename;
     @FXML private Group group3D;
     @FXML private ChoiceBox<String> sPort;
@@ -170,6 +172,8 @@ public class MainController {
     	shaftY.setText(String.format("%.0f",settings.shaftY));;
     	turnAngle.setText(String.format("%.0f",settings.turnAngle));;
     	iCamID.setText(String.valueOf(settings.camID));
+    	iCamW.setText(String.valueOf(settings.camW));
+    	iCamH.setText(String.valueOf(settings.camH));
     	sPort.getItems().clear();
     	sPort.getItems().add("emul");
         sPort.getItems().addAll(SerialPortList.getPortNames());
