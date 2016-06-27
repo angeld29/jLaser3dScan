@@ -78,8 +78,8 @@ public class ScanSettings {
 		cropRight = userPrefs.getInt("cropRight", 85);
 		hLen = userPrefs.getDouble("hLen", 14.5);
 		fiAngle = userPrefs.getDouble("fiAngle", 35.5);
-		shaftX = userPrefs.getDouble("shaftX", 23.3);
-		shaftY = userPrefs.getDouble("shaftY", 0.0);
+		shaftX = userPrefs.getDouble("shaftX", 19.6);
+		shaftY = userPrefs.getDouble("shaftY", 0.7);
 		turnAngle = userPrefs.getDouble("turnAngle", 2.0);
 	}
 }
