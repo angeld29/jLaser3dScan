@@ -76,9 +76,9 @@ public class ScanModel {
 		//double zz = xx * Math.tan(vAngle_r);
 		double zz = xx *  Math.tan(vAnglecam_r) * (height/2 - (double)y) / (height / 2) ;
 
-		//return turnPoints(new double[]{xx,yy,zz}, angle);
+		return turnPoints(new double[]{xx,yy,zz}, angle_r);
 		//return new double[]{(xx - settings.shaftX) ,(yy - settings.shaftY), zz};
-		return new double[]{(xx - settings.shaftX) * Math.cos(angle_r),(yy - settings.shaftY)*Math.sin(angle_r), zz};
+		//return new double[]{(xx - settings.shaftX) * Math.cos(angle_r),(yy - settings.shaftY)*Math.sin(angle_r), zz};
 	}
 	void SaveTxt(String fileName){
 		Path path;
