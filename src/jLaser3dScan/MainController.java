@@ -65,6 +65,8 @@ public class MainController {
 	@FXML private Slider umax;
 	@FXML private Slider vmin;
 	@FXML private Slider vmax;
+	@FXML private Slider cropLeft;
+	@FXML private Slider cropRight;
     @FXML private Button startScanBtn;
     @FXML private TextField fHAngle;
     @FXML private TextField fVAngle;
@@ -81,6 +83,7 @@ public class MainController {
     @FXML private ChoiceBox<String> sPort;
     @FXML CheckBox bIsFile;
     @FXML CheckBox bIsRecordVideo;
+    @FXML CheckBox bIsMJPG;
 
     private CaptureThread captureThread;
     private boolean isScaning = false;
@@ -120,6 +123,16 @@ public class MainController {
 		vmax.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
                     settings.vmax=new_val.intValue();
+                    settings.drawed = false;
+            } });
+		cropLeft.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    settings.cropLeft=new_val.intValue();
+                    settings.drawed = false;
+            } });
+		cropRight.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+                    settings.cropRight=new_val.intValue();
                     settings.drawed = false;
             } });
 		startCapture();
@@ -163,14 +176,15 @@ public class MainController {
     @FXML protected void LoadSettings(){
     	settings.Load();
     	bIsFile.setSelected(settings.isFile);
+    	bIsMJPG.setSelected(settings.isMJPG);
     	bIsRecordVideo.setSelected(settings.isRecordVideo);
     	fHAngle.setText(String.format("%.0f",settings.hAngle));
     	fVAngle.setText(String.format("%.0f",settings.vAngle));
-    	fiAngle.setText(String.format("%.0f",settings.fiAngle));;
-    	hLen.setText(String.format("%.0f",settings.hLen));;
-    	shaftX.setText(String.format("%.0f",settings.shaftX));;
-    	shaftY.setText(String.format("%.0f",settings.shaftY));;
-    	turnAngle.setText(String.format("%.0f",settings.turnAngle));;
+    	fiAngle.setText(String.format("%.1f",settings.fiAngle));;
+    	hLen.setText(String.format("%.1f",settings.hLen));;
+    	shaftX.setText(String.format("%.1f",settings.shaftX));;
+    	shaftY.setText(String.format("%.1f",settings.shaftY));;
+    	turnAngle.setText(String.format("%.1f",settings.turnAngle));;
     	iCamID.setText(String.valueOf(settings.camID));
     	iCamW.setText(String.valueOf(settings.camW));
     	iCamH.setText(String.valueOf(settings.camH));
@@ -186,13 +200,17 @@ public class MainController {
     	umax.setValue(settings.umax);
     	vmin.setValue(settings.vmin);
     	vmax.setValue(settings.vmax);
+    	cropLeft.setValue(settings.cropLeft);
+    	cropRight.setValue(settings.cropRight);
     }
     @FXML protected void SaveSettings(){
     	settings.isFile = bIsFile.isSelected();
+    	settings.isMJPG = bIsMJPG.isSelected();
     	settings.isRecordVideo = bIsRecordVideo.isSelected();
     	settings.hAngle = Double.parseDouble(fHAngle.getText());
     	settings.vAngle = Double.parseDouble(fVAngle.getText());
     	settings.fiAngle = Double.parseDouble(fiAngle.getText());
+    	settings.turnAngle = Double.parseDouble(turnAngle.getText());
     	settings.hLen = Double.parseDouble(hLen.getText());
     	settings.shaftX = Double.parseDouble(shaftX.getText());
     	settings.shaftY = Double.parseDouble(shaftY.getText());

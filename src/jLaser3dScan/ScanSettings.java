@@ -10,9 +10,12 @@ public class ScanSettings {
 	public int umax;
 	public int vmin;
 	public int vmax;
+	public int cropLeft;
+	public int cropRight;
 	public int camW;
 	public int camH;
 	public boolean isFile;
+	public boolean isMJPG;
 	public boolean isRecordVideo;
 	public String filename;
 	public String port; 
@@ -34,6 +37,7 @@ public class ScanSettings {
 		userPrefs.putInt("camW", camW);
 		userPrefs.putInt("camH", camH);
 		userPrefs.putBoolean("isFile", isFile);
+		userPrefs.putBoolean("isMJPG", isMJPG);
 		userPrefs.putBoolean("isRecordVideo", isRecordVideo);
 		userPrefs.putDouble("hAngle", hAngle);
 		userPrefs.putDouble("vAngle", vAngle);
@@ -45,6 +49,8 @@ public class ScanSettings {
 		userPrefs.putInt("umax", umax);
 		userPrefs.putInt("vmin", vmin);
 		userPrefs.putInt("vmax", vmax);
+		userPrefs.putInt("cropLeft", cropLeft);
+		userPrefs.putInt("cropRight", cropRight);
 		userPrefs.putDouble("shaftX", shaftX);
 		userPrefs.putDouble("fiAngle", fiAngle);
 		userPrefs.putDouble("hLen", hLen);
@@ -56,6 +62,7 @@ public class ScanSettings {
 		camW = userPrefs.getInt("camW", 0);
 		camH = userPrefs.getInt("camH", 0);
 		isFile = userPrefs.getBoolean("isFile", false);
+		isMJPG = userPrefs.getBoolean("isMJPG", true);
 		isRecordVideo = userPrefs.getBoolean("isRecordVideo", false);
 		hAngle = userPrefs.getDouble("hAngle", 56.0);
 		vAngle = userPrefs.getDouble("vAngle", 32.0);
@@ -67,9 +74,11 @@ public class ScanSettings {
 		umax = userPrefs.getInt("umax", 255);
 		vmin = userPrefs.getInt("vmin", 200);
 		vmax = userPrefs.getInt("vmax", 255);
+		cropLeft = userPrefs.getInt("cropLeft", 30);
+		cropRight = userPrefs.getInt("cropRight", 85);
 		hLen = userPrefs.getDouble("hLen", 16.0);
-		fiAngle = userPrefs.getDouble("fiAngle", 55.0);
-		shaftX = userPrefs.getDouble("shaftX", 23.0);
+		fiAngle = userPrefs.getDouble("fiAngle", 35.5);
+		shaftX = userPrefs.getDouble("shaftX", 23.3);
 		shaftY = userPrefs.getDouble("shaftY", 0.0);
 		turnAngle = userPrefs.getDouble("turnAngle", 2.0);
 	}

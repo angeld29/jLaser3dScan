@@ -25,6 +25,7 @@ public class ScanModel {
 		this.width = (double)width;
 		this.height = (double)height;
 		this.points3d = new ArrayList<double[]>();
+		System.out.println(width  +" "+ height);
 	}
 	public void clear(){
 		points3d.clear();
@@ -65,10 +66,10 @@ public class ScanModel {
 		//(settings.hAngle/2) * ( width/2 - (double)x)/ (width/2);
 		//double alpha_r = Math.toRadians(alpha);
 		//double gamma = 180 - (90 - settings.fiAngle) - alpha;
-		double betta_r = Math.toRadians(90- settings.fiAngle);
+		double betta_r = Math.toRadians(90 - settings.fiAngle);
 		double gamma_r = Math.PI - betta_r - alpha_r ;//Math.toRadians(gamma);
 		double a_len = settings.hLen * Math.sin(alpha_r)/Math.sin(gamma_r);
-		double xx = settings.hLen * a_len * Math.sin(betta_r);
+		double xx = a_len * Math.sin(betta_r);
 		double yy = settings.hLen - a_len * Math.cos(betta_r);
 		double vAnglecam_r = Math.toRadians(settings.hAngle /2 * height/width) ;//settings.vAngle;
 		//double vAngle = (vAnglecam/2)*(height/2 - y)/(height/2);
@@ -77,6 +78,7 @@ public class ScanModel {
 		double zz = xx *  Math.tan(vAnglecam_r) * (height/2 - (double)y) / (height / 2) ;
 
 		return turnPoints(new double[]{xx,yy,zz}, angle_r);
+		//return new double[]{xx,yy,zz};
 		//return new double[]{(xx - settings.shaftX) ,(yy - settings.shaftY), zz};
 		//return new double[]{(xx - settings.shaftX) * Math.cos(angle_r),(yy - settings.shaftY)*Math.sin(angle_r), zz};
 	}

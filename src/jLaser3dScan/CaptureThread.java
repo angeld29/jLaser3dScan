@@ -77,8 +77,11 @@ public class CaptureThread extends Thread {
         if( settings.isRecordVideo){
         	try{
         		//outputVideo.open("video/"+filename+".avi", outputVideo.fourcc('X','V','I','D'), 25, new Size(frameW, frameH), true);
-        		//outputVideo.open("video/"+filename+".avi", VideoWriter.fourcc('M','J','P','G'), 25, new Size(frameW, frameH), true);
-        		outputVideo.open("video/"+filename+".avi", 0, 25, new Size(frameW, frameH), true);
+        		if( settings.isMJPG ){
+        			outputVideo.open("video/"+filename+".avi", VideoWriter.fourcc('M','J','P','G'), 25, new Size(frameW, frameH), true);
+        		}else{
+        			outputVideo.open("video/"+filename+".avi", 0, 25, new Size(frameW, frameH), true);
+        		}
         	} catch (Exception e) {
         		e.printStackTrace();
         		// log the error
