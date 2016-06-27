@@ -45,7 +45,7 @@ public class ScanModel {
 		double y = (point[1] - shaft_y)*Math.cos(angle)- (point[0]-shaft_x)*Math.sin(angle);
 		return new double[]{x, y, point[2]};
 	}
-	double [] GetPoint(int x, int y, double angle){
+	double [] GetPoint_old(int x, int y, double angle){
 		double a_man = -1 * Math.tan(Math.toRadians(settings.hAngle/2)) / settings.hLen;
 		double b_man = Math.tan(Math.toRadians(settings.fiAngle)) / settings.hLen;
 		double tan_alfa = Math.tan(Math.toRadians(settings.vAngle/2));
@@ -56,6 +56,10 @@ public class ScanModel {
 		double z3  = ((height / 2) - (double) x) / (height / 2) *  x3 * tan_alfa;
 		//System.out.printf("%.0f %d %d %.2f %f %f %f %f\n", width, x,y, settings.hLen, x3,y3,z3,a_man);
 
+		return new double[] { x3, y3, z3 };
+	
+	}
+	double [] GetPoint(int x, int y, double angle_r){
 		
 		double alpha  = 90 + (settings.hAngle/2) * ( width/2 - (double)x)/ (width/2);
 		double alpha_r = Math.toRadians(alpha);
@@ -63,19 +67,19 @@ public class ScanModel {
 		double gamma_r = Math.toRadians(gamma);
 		double betta_r = Math.toRadians(90- settings.fiAngle);
 		double a_len = settings.hLen * Math.sin(alpha_r)/Math.sin(gamma_r);
-		double yy = settings.hLen * a_len * Math.sin(betta_r);
-		double xx = settings.hLen -  a_len * Math.cos(betta_r);
-		double vAngle = settings.vAngle*(height/2 - y)/(height/2);
+		double xx = settings.hLen * a_len * Math.sin(betta_r);
+		double yy = settings.hLen - a_len * Math.cos(betta_r);
+		double vAnglecam = settings.hAngle * height/width ;//settings.vAngle;
+		double vAngle = (vAnglecam/2)*(height/2 - y)/(height/2);
 		double vAngle_r = Math.toRadians(vAngle);
-		double zz = yy * Math.tan(vAngle_r);
+		double zz = xx * Math.tan(vAngle_r);
 
 		//return turnPoints(new double[]{xx,yy,zz}, angle);
-		return new double[]{xx,yy,zz};
-//		return new double[] { x3, y3, z3 };
+		return new double[]{(xx - settings.shaftX) ,(yy - settings.shaftY), zz};
+		//return new double[]{(xx - settings.shaftX) * Math.cos(angle_r),(yy - settings.shaftY)*Math.sin(angle_r), zz};
 	}
 	void SaveTxt(String fileName){
 		Path path;
-		Locale.setDefault(Locale.US);
 		try {
 			path = Paths.get(fileName);
 			try {

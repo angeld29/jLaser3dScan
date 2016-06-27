@@ -195,7 +195,7 @@ public class ProcessImage {
 		tmp2.copyTo(mats[9]);// V&M
 		ArrayList<int[]> points = FindPoints(mats[9]);// точки
 		
-		//Imgcodecs.imwrite(String.format("images/%08d.png", imgn++),mats[9]);
+		Imgcodecs.imwrite(String.format("images/%08d.png", imgn++),mats[9]);
 		
 		ArrayList<int[]> vecl = getLines(tmp3); //lines from OTSU	
 		mat.copyTo(mats[10]); 

@@ -6,12 +6,15 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
+import java.util.Locale;
+
 import org.opencv.core.Core;
 
 public class Main extends Application {
 	private MainController controller;
 	@Override
 	public void start(Stage primaryStage) {
+		Locale.setDefault(Locale.US);
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
 			BorderPane root = loader.load();
