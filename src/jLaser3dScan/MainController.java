@@ -197,6 +197,8 @@ public class MainController {
     	settings.shaftX = Double.parseDouble(shaftX.getText());
     	settings.shaftY = Double.parseDouble(shaftY.getText());
     	settings.camID = Integer.parseInt(iCamID.getText());
+    	settings.camW = Integer.parseInt(iCamW.getText());
+    	settings.camH = Integer.parseInt(iCamH.getText());
     	settings.port = sPort.getValue();
     	settings.filename = videoFilename;
     	settings.Save();
