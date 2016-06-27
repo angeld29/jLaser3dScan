@@ -25,7 +25,11 @@ public class ScanModel {
 		this.width = (double)width;
 		this.height = (double)height;
 		this.points3d = new ArrayList<double[]>();
-		System.out.println(width  +" "+ height);
+		double pt_old[] = GetPoint_old( 869, 20, 0);
+		double pt[] = GetPoint( 869, 20, 0);
+		
+		//System.out.println(pt_old[0]  +" "+ pt_old[1]);
+		//System.out.println(pt[0]  +" "+ pt[1]);
 	}
 	public void clear(){
 		points3d.clear();
@@ -43,7 +47,7 @@ public class ScanModel {
 		double shaft_x = settings.shaftX;
 		double shaft_y = settings.shaftY;
 		double x = (point[0] - shaft_x)*Math.cos(angle)- (point[1]-shaft_y)*Math.sin(angle);
-		double y = (point[1] - shaft_y)*Math.cos(angle)- (point[0]-shaft_x)*Math.sin(angle);
+		double y = (point[1] - shaft_y)*Math.cos(angle)+ (point[0]-shaft_x)*Math.sin(angle);
 		return new double[]{x, y, point[2]};
 	}
 	double [] GetPoint_old(int x, int y, double angle){
@@ -57,7 +61,8 @@ public class ScanModel {
 		double z3  = ((height / 2) - (double) x) / (height / 2) *  x3 * tan_alfa;
 		//System.out.printf("%.0f %d %d %.2f %f %f %f %f\n", width, x,y, settings.hLen, x3,y3,z3,a_man);
 
-		return new double[] { x3, y3, z3 };
+		//return new double[] { x3, y3, z3 };
+		return turnPoints(new double[]{x3,y3,z3}, angle);
 	
 	}
 	double [] GetPoint(int x, int y, double angle_r){
@@ -78,7 +83,8 @@ public class ScanModel {
 		double zz = xx *  Math.tan(vAnglecam_r) * (height/2 - (double)y) / (height / 2) ;
 
 		return turnPoints(new double[]{xx,yy,zz}, angle_r);
-		//return new double[]{xx,yy,zz};
+		//return new double[]{ xx + angle_r*2, yy, zz};
+		//return new double[]{ xx + angle_r*2, a_len, zz};
 		//return new double[]{(xx - settings.shaftX) ,(yy - settings.shaftY), zz};
 		//return new double[]{(xx - settings.shaftX) * Math.cos(angle_r),(yy - settings.shaftY)*Math.sin(angle_r), zz};
 	}

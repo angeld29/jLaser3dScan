@@ -76,7 +76,7 @@ public class ScanSettings {
 		vmax = userPrefs.getInt("vmax", 255);
 		cropLeft = userPrefs.getInt("cropLeft", 30);
 		cropRight = userPrefs.getInt("cropRight", 85);
-		hLen = userPrefs.getDouble("hLen", 16.0);
+		hLen = userPrefs.getDouble("hLen", 14.5);
 		fiAngle = userPrefs.getDouble("fiAngle", 35.5);
 		shaftX = userPrefs.getDouble("shaftX", 23.3);
 		shaftY = userPrefs.getDouble("shaftY", 0.0);
