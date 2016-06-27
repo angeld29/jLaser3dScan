@@ -23,6 +23,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Scalar; 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
+import org.opencv.core.Point;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -146,6 +147,19 @@ public class CaptureThread extends Thread {
             	if(settings.isRecordVideo && outputVideo.isOpened()){
             		Imgproc.resize(mat, resframe, new Size(frameW, frameH));
             		outputVideo.write(resframe);
+            	}
+            	{// add points 2 main image
+            		Mat m1 = new Mat();
+            		mat.copyTo(m1);
+            		for (int i = 0; i < points.size(); i++)
+            		{
+            			int[] point = points.get(i);
+            			//Imgproc.line(mats[10], start, end, new Scalar(255,0,0), 3);
+            			Imgproc.circle(m1, new Point(point[0], point[1]), 1, new Scalar(255,255,255));
+            		}
+            		Platform.runLater(() -> controller.setImage(0, procimg.mat2Image(m1)));	
+
+
             	}
 				if( settings.isFile){
 					framen += 1;

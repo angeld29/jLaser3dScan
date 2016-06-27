@@ -99,7 +99,7 @@ public class ProcessImage {
 							//System.out.println(j+ " " + maxVal + " " + lastOff + " " + firstOff);
 							int off = (firstOff + lastOff)/2;
 							in.put(j, off,  255);
-							points.add(new int[]{ j, off });
+							points.add(new int[]{  off,j });
 							maxVal = -1;
 							firstOff = -1;
 							lastOff = -1;
@@ -154,6 +154,9 @@ public class ProcessImage {
 				 }
 		
 		return false;
+	}
+	public Mat getPoints(){
+		return mats[9];
 	}
 	private ArrayList<int[]> getLines(Mat in){
 		ArrayList<int[]> vec = new ArrayList <int[]>();
